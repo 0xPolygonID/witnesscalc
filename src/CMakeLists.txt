@@ -64,3 +64,12 @@ set_target_properties(witnesscalc_credentialAtomicQuerySigStatic PROPERTIES OUTP
 
 add_executable(credentialAtomicQuerySig main.cpp credentialAtomicQuerySig.cpp)
 target_link_libraries(credentialAtomicQuerySig witnesscalc_credentialAtomicQuerySigStatic)
+
+# credentialAtomicQueryMTP
+add_library(witnesscalc_credentialAtomicQueryMTP SHARED ${LIB_SOURCES})
+
+add_library(witnesscalc_credentialAtomicQueryMTPStatic STATIC ${LIB_SOURCES})
+set_target_properties(witnesscalc_credentialAtomicQueryMTPStatic PROPERTIES OUTPUT_NAME witnesscalc_credentialAtomicQueryMTP)
+
+add_executable(credentialAtomicQueryMTP main.cpp credentialAtomicQueryMTP.cpp)
+target_link_libraries(credentialAtomicQueryMTP witnesscalc_credentialAtomicQueryMTPStatic)
