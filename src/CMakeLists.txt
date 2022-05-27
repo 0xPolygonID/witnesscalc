@@ -48,7 +48,7 @@ if(USE_ASM)
 endif()
 
 # auth
-add_library(witnesscalc_auth SHARED ${LIB_SOURCES})
+add_library(witnesscalc_auth SHARED auth.cpp ${LIB_SOURCES})
 
 add_library(witnesscalc_authStatic STATIC ${LIB_SOURCES})
 set_target_properties(witnesscalc_authStatic PROPERTIES OUTPUT_NAME witnesscalc_auth)
@@ -57,7 +57,7 @@ add_executable(auth main.cpp auth.cpp)
 target_link_libraries(auth witnesscalc_authStatic)
 
 # credentialAtomicQuerySig
-add_library(witnesscalc_credentialAtomicQuerySig SHARED ${LIB_SOURCES})
+add_library(witnesscalc_credentialAtomicQuerySig SHARED credentialAtomicQuerySig.cpp ${LIB_SOURCES})
 
 add_library(witnesscalc_credentialAtomicQuerySigStatic STATIC ${LIB_SOURCES})
 set_target_properties(witnesscalc_credentialAtomicQuerySigStatic PROPERTIES OUTPUT_NAME witnesscalc_credentialAtomicQuerySig)
@@ -66,7 +66,7 @@ add_executable(credentialAtomicQuerySig main.cpp credentialAtomicQuerySig.cpp)
 target_link_libraries(credentialAtomicQuerySig witnesscalc_credentialAtomicQuerySigStatic)
 
 # credentialAtomicQueryMTP
-add_library(witnesscalc_credentialAtomicQueryMTP SHARED ${LIB_SOURCES})
+add_library(witnesscalc_credentialAtomicQueryMTP SHARED credentialAtomicQueryMTP.cpp ${LIB_SOURCES})
 
 add_library(witnesscalc_credentialAtomicQueryMTPStatic STATIC ${LIB_SOURCES})
 set_target_properties(witnesscalc_credentialAtomicQueryMTPStatic PROPERTIES OUTPUT_NAME witnesscalc_credentialAtomicQueryMTP)
