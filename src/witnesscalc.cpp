@@ -13,8 +13,8 @@ Circom_Circuit* loadCircuit(const void *buffer, unsigned long buffer_size) {
 
     u8* bdata = (u8*)buffer;
 
-    circuit->InputHashMap = new HashSignalPair[get_size_of_input_hashmap()];
-    uint dsize = get_size_of_input_hashmap()*sizeof(HashSignalPair);
+    circuit->InputHashMap = new HashSignalInfo[get_size_of_input_hashmap()];
+    uint dsize = get_size_of_input_hashmap()*sizeof(HashSignalInfo);
     memcpy((void *)(circuit->InputHashMap), (void *)bdata, dsize);
 
     circuit->witness2SignalList = new u64[get_size_of_witness()];
