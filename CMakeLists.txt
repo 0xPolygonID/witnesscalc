@@ -33,7 +33,7 @@ if(TARGET_PLATFORM MATCHES "android")
 
 elseif(TARGET_PLATFORM MATCHES "ios")
     set(USE_ASM FALSE)
-
+    add_definitions(-D_LONG_LONG_LIMB)
 endif()
 
 add_subdirectory(src)
