@@ -50,6 +50,7 @@ install(TARGETS
     credentialAtomicQueryMTP
     witnesscalc_credentialAtomicQueryMTP
     witnesscalc_credentialAtomicQueryMTPStatic
+    fr
     RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
     BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}/app
     LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
@@ -60,5 +61,9 @@ install(FILES "${GMP_LIB_DIR}/${GMP_LIB_FILE}"
 install(FILES src/auth.dat src/credentialAtomicQuerySig.dat src/credentialAtomicQueryMTP.dat
     DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
-install(FILES src/witnesscalc.h
+install(FILES
+    src/witnesscalc.h
+    src/witnesscalc_auth.h
+    src/witnesscalc_credentialAtomicQuerySig.h
+    src/witnesscalc_credentialAtomicQueryMTP.h
     DESTINATION ${CMAKE_INSTALL_PREFIX}/include)

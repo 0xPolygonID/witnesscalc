@@ -1,5 +1,5 @@
-#ifndef WITNESSCALC_H
-#define WITNESSCALC_H
+#ifndef WITNESSCALC_CREDENTIALATOMICQUERYSIG_H
+#define WITNESSCALC_CREDENTIALATOMICQUERYSIG_H
 
 
 #ifdef __cplusplus
@@ -25,7 +25,7 @@ extern "C" {
  */
 
 int
-witnesscalc(
+witnesscalc_credentialAtomicQuerySig(
     const char *circuit_buffer,  unsigned long  circuit_size,
     const char *json_buffer,     unsigned long  json_size,
     char       *wtns_buffer,     unsigned long *wtns_size,
@@ -36,4 +36,4 @@ witnesscalc(
 #endif
 
 
-#endif // WITNESSCALC_H
+#endif // WITNESSCALC_CREDENTIALATOMICQUERYSIG_H

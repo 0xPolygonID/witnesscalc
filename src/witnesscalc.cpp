@@ -188,10 +188,10 @@ void storeBinWitness(Circom_CalcWit *ctx, char *buffer) {
 }
 
 int witnesscalc(
-    const char *crcuit_buffer,  unsigned long  crcuit_size,
-    const char *json_buffer,    unsigned long  json_size,
-    char       *wtns_buffer,    unsigned long *wtns_size,
-    char       *error_msg,      unsigned long  error_msg_maxsize)
+    const char *circuit_buffer,  unsigned long  circuit_size,
+    const char *json_buffer,     unsigned long  json_size,
+    char       *wtns_buffer,     unsigned long *wtns_size,
+    char       *error_msg,       unsigned long  error_msg_maxsize)
 {
     unsigned long witnessSize = getBinWitnessSize();
 
@@ -202,7 +202,7 @@ int witnesscalc(
 
     try {
 
-        std::unique_ptr<Circom_Circuit> circuit(loadCircuit(crcuit_buffer, crcuit_size));
+        std::unique_ptr<Circom_Circuit> circuit(loadCircuit(circuit_buffer, circuit_size));
 
         std::unique_ptr<Circom_CalcWit> ctx(new Circom_CalcWit(circuit.get()));
 
