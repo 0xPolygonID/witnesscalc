@@ -6,7 +6,7 @@ set(USE_ASM ON CACHE BOOL "Use asm implementation for Fr and Fq")
 
 project(witnesscalc LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 message("CMAKE_CROSSCOMPILING=" ${CMAKE_CROSSCOMPILING})

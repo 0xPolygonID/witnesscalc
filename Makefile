@@ -6,7 +6,6 @@ host:
 	cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../package && \
 	make -j$(nproc) -vvv && make install
 
-
 android:
 	rm -rf build_witnesscalc_android && mkdir build_witnesscalc_android && cd build_witnesscalc_android && \
 	cmake .. -DTARGET_PLATFORM=ANDROID -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../package_android && \
@@ -19,6 +18,5 @@ android_x86_64:
 
 ios:
 	rm -rf build_witnesscalc_ios && mkdir build_witnesscalc_ios && cd build_witnesscalc_ios && \
-	cmake .. -GXcode -DTARGET_PLATFORM=IOS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../package_ios && \
-    echo "" && echo "Now open Xcode and compile the generated project" && echo ""
-
+	cmake .. -GXcode -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../package_ios -DCMAKE_TOOLCHAIN_FILE=../ios.toolchain.cmake -DPLATFORM=OS64 && \
+	cmake --build . --config Release && cmake --install . --config Release
