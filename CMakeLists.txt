@@ -40,20 +40,27 @@ add_subdirectory(src)
 
 
 install(TARGETS
-    tests
-    auth
     witnesscalc_auth
     witnesscalc_authStatic
-    credentialAtomicQuerySig
     witnesscalc_credentialAtomicQuerySig
     witnesscalc_credentialAtomicQuerySigStatic
-    credentialAtomicQueryMTP
     witnesscalc_credentialAtomicQueryMTP
     witnesscalc_credentialAtomicQueryMTPStatic
     fr
     RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
     BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}/app
     LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+
+if(TARGET_PLATFORM MATCHES "host")
+    install(TARGETS
+            tests
+            auth
+            credentialAtomicQuerySig
+            credentialAtomicQueryMTP
+            RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+            BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}/app
+            LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+endif()
 
 install(FILES "${GMP_LIB_DIR}/${GMP_LIB_FILE}"
     DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)

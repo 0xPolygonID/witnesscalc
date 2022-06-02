@@ -40,8 +40,9 @@ set(UNIT_TEST_SOURCES
     tests.cpp
     )
 
-add_executable(tests tests.cpp)
-
+if(TARGET_PLATFORM MATCHES "host")
+    add_executable(tests tests.cpp)
+endif()
 
 set(LIB_SOURCES
     calcwit.cpp
@@ -60,9 +61,10 @@ add_library(witnesscalc_auth SHARED ${AUTH_SOURCES})
 add_library(witnesscalc_authStatic STATIC ${AUTH_SOURCES})
 set_target_properties(witnesscalc_authStatic PROPERTIES OUTPUT_NAME witnesscalc_auth)
 
-add_executable(auth main.cpp)
-target_link_libraries(auth witnesscalc_authStatic)
-
+if(TARGET_PLATFORM MATCHES "host")
+    add_executable(auth main.cpp)
+    target_link_libraries(auth witnesscalc_authStatic)
+endif()
 
 # credentialAtomicQuerySig
 set(CREDENTIALATOMICQUERYSIG_SOURCES ${LIB_SOURCES}
@@ -75,8 +77,10 @@ add_library(witnesscalc_credentialAtomicQuerySig SHARED ${CREDENTIALATOMICQUERYS
 add_library(witnesscalc_credentialAtomicQuerySigStatic STATIC ${CREDENTIALATOMICQUERYSIG_SOURCES})
 set_target_properties(witnesscalc_credentialAtomicQuerySigStatic PROPERTIES OUTPUT_NAME witnesscalc_credentialAtomicQuerySig)
 
-add_executable(credentialAtomicQuerySig main.cpp)
-target_link_libraries(credentialAtomicQuerySig witnesscalc_credentialAtomicQuerySigStatic)
+if(TARGET_PLATFORM MATCHES "host")
+    add_executable(credentialAtomicQuerySig main.cpp)
+    target_link_libraries(credentialAtomicQuerySig witnesscalc_credentialAtomicQuerySigStatic)
+endif()
 
 # credentialAtomicQueryMTP
 set(CREDENTIALATOMICQUERYMTP_SOURCES ${LIB_SOURCES}
@@ -89,5 +93,7 @@ add_library(witnesscalc_credentialAtomicQueryMTP SHARED ${CREDENTIALATOMICQUERYM
 add_library(witnesscalc_credentialAtomicQueryMTPStatic STATIC ${CREDENTIALATOMICQUERYMTP_SOURCES})
 set_target_properties(witnesscalc_credentialAtomicQueryMTPStatic PROPERTIES OUTPUT_NAME witnesscalc_credentialAtomicQueryMTP)
 
-add_executable(credentialAtomicQueryMTP main.cpp)
-target_link_libraries(credentialAtomicQueryMTP witnesscalc_credentialAtomicQueryMTPStatic)
+if(TARGET_PLATFORM MATCHES "host")
+    add_executable(credentialAtomicQueryMTP main.cpp)
+    target_link_libraries(credentialAtomicQueryMTP witnesscalc_credentialAtomicQueryMTPStatic)
+endif()
