@@ -41,6 +41,7 @@ add_subdirectory(src)
 
 install(TARGETS
     tests
+    test_platform
     auth
     witnesscalc_auth
     witnesscalc_authStatic

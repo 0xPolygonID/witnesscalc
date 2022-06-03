@@ -36,11 +36,8 @@ set_target_properties(fr PROPERTIES POSITION_INDEPENDENT_CODE ON)
 link_libraries(fr)
 
 
-set(UNIT_TEST_SOURCES
-    tests.cpp
-    )
-
 add_executable(tests tests.cpp)
+add_executable(test_platform test_platform.cpp)
 
 
 set(LIB_SOURCES
