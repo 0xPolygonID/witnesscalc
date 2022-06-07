@@ -45,12 +45,12 @@ install(TARGETS
     auth
     witnesscalc_auth
     witnesscalc_authStatic
-    #credentialAtomicQuerySig
-    #witnesscalc_credentialAtomicQuerySig
-    #witnesscalc_credentialAtomicQuerySigStatic
-    #credentialAtomicQueryMTP
-    #witnesscalc_credentialAtomicQueryMTP
-    #witnesscalc_credentialAtomicQueryMTPStatic
+    credentialAtomicQuerySig
+    witnesscalc_credentialAtomicQuerySig
+    witnesscalc_credentialAtomicQuerySigStatic
+    credentialAtomicQueryMTP
+    witnesscalc_credentialAtomicQueryMTP
+    witnesscalc_credentialAtomicQueryMTPStatic
     fr
     RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
     BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}/app
@@ -65,6 +65,6 @@ install(FILES src/auth.dat src/credentialAtomicQuerySig.dat src/credentialAtomic
 install(FILES
     src/witnesscalc.h
     src/witnesscalc_auth.h
-    #src/witnesscalc_credentialAtomicQuerySig.h
-    #src/witnesscalc_credentialAtomicQueryMTP.h
+    src/witnesscalc_credentialAtomicQuerySig.h
+    src/witnesscalc_credentialAtomicQueryMTP.h
     DESTINATION ${CMAKE_INSTALL_PREFIX}/include)

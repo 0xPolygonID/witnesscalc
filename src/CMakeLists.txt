@@ -66,10 +66,10 @@ target_compile_definitions(auth PUBLIC CIRCUIT_NAME=auth)
 
 # credentialAtomicQuerySig
 set(CREDENTIALATOMICQUERYSIG_SOURCES ${LIB_SOURCES}
-   credentialAtomicQuerySig.cpp
-   witnesscalc_credentialAtomicQuerySig.h
-   witnesscalc_credentialAtomicQuerySig.cpp
-   )
+    credentialAtomicQuerySig.cpp
+    witnesscalc_credentialAtomicQuerySig.h
+    witnesscalc_credentialAtomicQuerySig.cpp
+    )
 
 add_library(witnesscalc_credentialAtomicQuerySig SHARED ${CREDENTIALATOMICQUERYSIG_SOURCES})
 add_library(witnesscalc_credentialAtomicQuerySigStatic STATIC ${CREDENTIALATOMICQUERYSIG_SOURCES})
@@ -84,10 +84,10 @@ target_compile_definitions(credentialAtomicQuerySig PUBLIC CIRCUIT_NAME=credenti
 
 # credentialAtomicQueryMTP
 set(CREDENTIALATOMICQUERYMTP_SOURCES ${LIB_SOURCES}
-   credentialAtomicQueryMTP.cpp
-   witnesscalc_credentialAtomicQueryMTP.h
-   witnesscalc_credentialAtomicQueryMTP.cpp
-   )
+    credentialAtomicQueryMTP.cpp
+    witnesscalc_credentialAtomicQueryMTP.h
+    witnesscalc_credentialAtomicQueryMTP.cpp
+    )
 
 add_library(witnesscalc_credentialAtomicQueryMTP SHARED ${CREDENTIALATOMICQUERYMTP_SOURCES})
 add_library(witnesscalc_credentialAtomicQueryMTPStatic STATIC ${CREDENTIALATOMICQUERYMTP_SOURCES})
