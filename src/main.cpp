@@ -80,7 +80,7 @@ int main (int argc, char *argv[]) {
         FileMapLoader datLoader(datfile);
         FileMapLoader jsonLoader(jsonfile);
 
-        int error = witnesscalc(datLoader.buffer, datLoader.size,
+        int error = CIRCUIT_NAME::witnesscalc(datLoader.buffer, datLoader.size,
                                 jsonLoader.buffer, jsonLoader.size,
                                 WitnessBuffer, &witnessSize,
                                 errorMessage, sizeof(errorMessage));

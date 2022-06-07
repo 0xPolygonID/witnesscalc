@@ -8,7 +8,7 @@ witnesscalc_credentialAtomicQuerySig(
     char       *wtns_buffer,     unsigned long *wtns_size,
     char       *error_msg,       unsigned long  error_msg_maxsize)
 {
-    return witnesscalc(circuit_buffer, circuit_size,
+    return CIRCUIT_NAME::witnesscalc(circuit_buffer, circuit_size,
                        json_buffer,   json_size,
                        wtns_buffer,   wtns_size,
                        error_msg,     error_msg_maxsize);

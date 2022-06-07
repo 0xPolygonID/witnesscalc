@@ -1,6 +1,7 @@
 #ifndef WITNESSCALC_H
 #define WITNESSCALC_H
 
+namespace CIRCUIT_NAME {
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,5 +36,6 @@ witnesscalc(
 }
 #endif
 
+} // namespace
 
 #endif // WITNESSCALC_H
