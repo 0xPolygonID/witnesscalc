@@ -1,5 +1,7 @@
 #include "witnesscalc_auth.h"
 #include "witnesscalc.h"
+#include "circom.hpp"
+#include "auth.cpp"
 
 int
 witnesscalc_auth(
@@ -8,7 +10,10 @@ witnesscalc_auth(
     char       *wtns_buffer,     unsigned long *wtns_size,
     char       *error_msg,       unsigned long  error_msg_maxsize)
 {
-    return witnesscalc(circuit_buffer, circuit_size,
+    Auth *code;
+    code = new Auth;
+    return witnesscalc(code,
+                       circuit_buffer, circuit_size,
                        json_buffer,   json_size,
                        wtns_buffer,   wtns_size,
                        error_msg,     error_msg_maxsize);

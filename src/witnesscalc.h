@@ -1,10 +1,7 @@
 #ifndef WITNESSCALC_H
 #define WITNESSCALC_H
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "circom.hpp"
 
 #define WITNESSCALC_OK                  0x0
 #define WITNESSCALC_ERROR               0x1
@@ -26,14 +23,10 @@ extern "C" {
 
 int
 witnesscalc(
+    Circom_Code *code,
     const char *circuit_buffer,  unsigned long  circuit_size,
     const char *json_buffer,     unsigned long  json_size,
     char       *wtns_buffer,     unsigned long *wtns_size,
     char       *error_msg,       unsigned long  error_msg_maxsize);
-
-#ifdef __cplusplus
-}
-#endif
-
 
 #endif // WITNESSCALC_H

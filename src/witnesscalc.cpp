@@ -13,27 +13,27 @@ Circom_Circuit* loadCircuit(const void *buffer, unsigned long buffer_size) {
 
     u8* bdata = (u8*)buffer;
 
-    circuit->InputHashMap = new HashSignalInfo[get_size_of_input_hashmap()];
-    uint dsize = get_size_of_input_hashmap()*sizeof(HashSignalInfo);
+    circuit->InputHashMap = new HashSignalInfo[code->get_size_of_input_hashmap()];
+    uint dsize = code->get_size_of_input_hashmap()*sizeof(HashSignalInfo);
     memcpy((void *)(circuit->InputHashMap), (void *)bdata, dsize);
 
-    circuit->witness2SignalList = new u64[get_size_of_witness()];
+    circuit->witness2SignalList = new u64[code->get_size_of_witness()];
     uint inisize = dsize;
-    dsize = get_size_of_witness()*sizeof(u64);
+    dsize = code->get_size_of_witness()*sizeof(u64);
     memcpy((void *)(circuit->witness2SignalList), (void *)(bdata+inisize), dsize);
 
-    circuit->circuitConstants = new FrElement[get_size_of_constants()];
-    if (get_size_of_constants()>0) {
+    circuit->circuitConstants = new FrElement[code->get_size_of_constants()];
+    if (code->get_size_of_constants()>0) {
       inisize += dsize;
-      dsize = get_size_of_constants()*sizeof(FrElement);
+      dsize = code->get_size_of_constants()*sizeof(FrElement);
       memcpy((void *)(circuit->circuitConstants), (void *)(bdata+inisize), dsize);
     }
 
     std::map<u32,IODefPair> templateInsId2IOSignalInfo1;
-    if (get_size_of_io_map()>0) {
-      u32 index[get_size_of_io_map()];
+    if (code->get_size_of_io_map()>0) {
+      u32 index[code->get_size_of_io_map()];
       inisize += dsize;
-      dsize = get_size_of_io_map()*sizeof(u32);
+      dsize = code->get_size_of_io_map()*sizeof(u32);
       memcpy((void *)index, (void *)(bdata+inisize), dsize);
       inisize += dsize;
       assert(inisize % sizeof(u32) == 0);
@@ -42,7 +42,7 @@ Circom_Circuit* loadCircuit(const void *buffer, unsigned long buffer_size) {
       memcpy((void *)dataiomap, (void *)(bdata+inisize), buffer_size-inisize);
       u32* pu32 = dataiomap;
 
-      for (int i = 0; i < get_size_of_io_map(); i++) {
+      for (int i = 0; i < code->get_size_of_io_map(); i++) {
     u32 n = *pu32;
     IODefPair p;
     p.len = n;
@@ -117,7 +117,7 @@ void loadJson(Circom_CalcWit *ctx, const char *json_buffer, unsigned long buffer
 
 unsigned long getBinWitnessSize() {
 
-     uint Nwtns = get_size_of_witness();
+     uint Nwtns = code->get_size_of_witness();
 
      return 44 + Fr_N64*8 * (Nwtns + 1);
 }
@@ -166,7 +166,7 @@ void storeBinWitness(Circom_CalcWit *ctx, char *buffer) {
 
      buffer = appendBuffer(buffer, Fr_q.longVal);
 
-     uint Nwtns = get_size_of_witness();
+     uint Nwtns = code->get_size_of_witness();
 
      u32 nVars = (u32)Nwtns;
      buffer = appendBuffer(buffer, nVars);
@@ -188,6 +188,7 @@ void storeBinWitness(Circom_CalcWit *ctx, char *buffer) {
 }
 
 int witnesscalc(
+    Circom_Code *code,
     const char *circuit_buffer,  unsigned long  circuit_size,
     const char *json_buffer,     unsigned long  json_size,
     char       *wtns_buffer,     unsigned long *wtns_size,
@@ -211,8 +212,8 @@ int witnesscalc(
         if (ctx.get()->getRemaingInputsToBeSet() != 0) {
             std::stringstream stream;
             stream << "Not all inputs have been set. Only "
-                   << get_main_input_signal_no()-ctx.get()->getRemaingInputsToBeSet()
-                   << " out of " << get_main_input_signal_no();
+                   << code->get_main_input_signal_no()-ctx.get()->getRemaingInputsToBeSet()
+                   << " out of " << code->get_main_input_signal_no();
 
             strncpy(error_msg, stream.str().c_str(), error_msg_maxsize);
             return WITNESSCALC_ERROR;

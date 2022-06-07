@@ -3,8 +3,6 @@
 #include <assert.h>
 #include "calcwit.hpp"
 
-extern void run(Circom_CalcWit* ctx);
-
 std::string int_to_hex( u64 i )
 {
   std::stringstream stream;
@@ -23,16 +21,17 @@ u64 fnv1a(std::string s) {
   return hash;
 }
 
-Circom_CalcWit::Circom_CalcWit (Circom_Circuit *aCircuit, uint maxTh) {
+Circom_CalcWit::Circom_CalcWit (Circom_Circuit *aCircuit, Circom_Code *aCode, uint maxTh) {
   circuit = aCircuit;
-  inputSignalAssignedCounter = get_main_input_signal_no();
+  code = aCode;
+  inputSignalAssignedCounter = code->get_main_input_signal_no();
   inputSignalAssigned = new bool[inputSignalAssignedCounter];
   for (int i = 0; i< inputSignalAssignedCounter; i++) {
     inputSignalAssigned[i] = false;
   }
-  signalValues = new FrElement[get_total_signal_no()];
+  signalValues = new FrElement[code->get_total_signal_no()];
   Fr_str2element(&signalValues[0], "1");
-  componentMemory = new Circom_Component[get_number_of_components()];
+  componentMemory = new Circom_Component[code->get_number_of_components()];
   circuitConstants = circuit ->circuitConstants;
   templateInsId2IOSignalInfo = circuit -> templateInsId2IOSignalInfo;
 
@@ -48,7 +47,7 @@ Circom_CalcWit::~Circom_CalcWit() {
 }
 
 uint Circom_CalcWit::getInputSignalHashPosition(u64 h) {
-  uint n = get_size_of_input_hashmap();
+  uint n = code->get_size_of_input_hashmap();
   uint pos = (uint)(h % (u64)n);
   if (circuit->InputHashMap[pos].hash!=h){
     uint inipos = pos;
@@ -79,15 +78,15 @@ void Circom_CalcWit::setInputSignal(u64 h, uint i,  FrElement & val){
   }
   
   uint si = circuit->InputHashMap[pos].signalid+i;
-  if (inputSignalAssigned[si-get_main_input_signal_start()]) {
+  if (inputSignalAssigned[si-code->get_main_input_signal_start()]) {
     fprintf(stderr, "Signal assigned twice: %d\n", si);
     assert(false);
   }
   signalValues[si] = val;
-  inputSignalAssigned[si-get_main_input_signal_start()] = true;
+  inputSignalAssigned[si-code->get_main_input_signal_start()] = true;
   inputSignalAssignedCounter--;
   if (inputSignalAssignedCounter == 0) {
-    run(this);
+    code->run(this);
   }
 }
 

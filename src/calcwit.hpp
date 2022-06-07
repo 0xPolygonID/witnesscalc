@@ -20,6 +20,7 @@ class Circom_CalcWit {
     unsigned int inputSignalAssignedCounter;
 
   Circom_Circuit *circuit;
+  Circom_Code    *code;
 
 public:
 
@@ -37,7 +38,7 @@ public:
     unsigned int maxThread;
 
   // Functions called by the circuit
-  Circom_CalcWit(Circom_Circuit *aCircuit, unsigned int numTh = NMUTEXES);
+  Circom_CalcWit(Circom_Circuit *aCircuit, Circom_Code *aCode, unsigned int numTh = NMUTEXES);
   ~Circom_CalcWit();
 
   // Public functions
@@ -63,6 +64,19 @@ private:
 
 };
 
-typedef void (*Circom_TemplateFunction)(unsigned int __cIdx, Circom_CalcWit* __ctx); 
+typedef void (*Circom_TemplateFunction)(unsigned int __cIdx, Circom_CalcWit* __ctx);
+
+class Circom_Code {
+public:
+    unsigned int get_main_input_signal_start();
+    unsigned int get_main_input_signal_no();
+    unsigned int get_total_signal_no();
+    unsigned int get_number_of_components();
+    unsigned int get_size_of_input_hashmap();
+    unsigned int get_size_of_witness();
+    unsigned int get_size_of_constants();
+    unsigned int get_size_of_io_map();
+    void run(Circom_CalcWit* ctx);
+}
 
 #endif // CIRCOM_CALCWIT_H
