@@ -3,10 +3,6 @@
 
 namespace CIRCUIT_NAME {
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #define WITNESSCALC_OK                  0x0
 #define WITNESSCALC_ERROR               0x1
 #define WITNESSCALC_ERROR_SHORT_BUFFER  0x2
@@ -31,10 +27,6 @@ witnesscalc(
     const char *json_buffer,     unsigned long  json_size,
     char       *wtns_buffer,     unsigned long *wtns_size,
     char       *error_msg,       unsigned long  error_msg_maxsize);
-
-#ifdef __cplusplus
-}
-#endif
 
 } // namespace
 
