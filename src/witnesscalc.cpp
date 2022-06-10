@@ -6,6 +6,8 @@
 #include <sstream>
 #include <memory>
 
+namespace CIRCUIT_NAME {
+
 using json = nlohmann::json;
 
 Circom_Circuit* loadCircuit(const void *buffer, unsigned long buffer_size) {
@@ -245,3 +247,5 @@ int witnesscalc(
 
     return WITNESSCALC_OK;
 }
+
+} // namespace

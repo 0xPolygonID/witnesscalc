@@ -1,10 +1,7 @@
 #ifndef WITNESSCALC_H
 #define WITNESSCALC_H
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+namespace CIRCUIT_NAME {
 
 #define WITNESSCALC_OK                  0x0
 #define WITNESSCALC_ERROR               0x1
@@ -31,9 +28,6 @@ witnesscalc(
     char       *wtns_buffer,     unsigned long *wtns_size,
     char       *error_msg,       unsigned long  error_msg_maxsize);
 
-#ifdef __cplusplus
-}
-#endif
-
+} // namespace
 
 #endif // WITNESSCALC_H

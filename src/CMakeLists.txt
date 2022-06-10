@@ -60,6 +60,9 @@ set_target_properties(witnesscalc_authStatic PROPERTIES OUTPUT_NAME witnesscalc_
 add_executable(auth main.cpp)
 target_link_libraries(auth witnesscalc_authStatic)
 
+target_compile_definitions(witnesscalc_auth PUBLIC CIRCUIT_NAME=auth)
+target_compile_definitions(witnesscalc_authStatic PUBLIC CIRCUIT_NAME=auth)
+target_compile_definitions(auth PUBLIC CIRCUIT_NAME=auth)
 
 # credentialAtomicQuerySig
 set(CREDENTIALATOMICQUERYSIG_SOURCES ${LIB_SOURCES}
@@ -75,6 +78,10 @@ set_target_properties(witnesscalc_credentialAtomicQuerySigStatic PROPERTIES OUTP
 add_executable(credentialAtomicQuerySig main.cpp)
 target_link_libraries(credentialAtomicQuerySig witnesscalc_credentialAtomicQuerySigStatic)
 
+target_compile_definitions(witnesscalc_credentialAtomicQuerySig PUBLIC CIRCUIT_NAME=credentialAtomicQuerySig)
+target_compile_definitions(witnesscalc_credentialAtomicQuerySigStatic PUBLIC CIRCUIT_NAME=credentialAtomicQuerySig)
+target_compile_definitions(credentialAtomicQuerySig PUBLIC CIRCUIT_NAME=credentialAtomicQuerySig)
+
 # credentialAtomicQueryMTP
 set(CREDENTIALATOMICQUERYMTP_SOURCES ${LIB_SOURCES}
     credentialAtomicQueryMTP.cpp
@@ -88,3 +95,7 @@ set_target_properties(witnesscalc_credentialAtomicQueryMTPStatic PROPERTIES OUTP
 
 add_executable(credentialAtomicQueryMTP main.cpp)
 target_link_libraries(credentialAtomicQueryMTP witnesscalc_credentialAtomicQueryMTPStatic)
+
+target_compile_definitions(witnesscalc_credentialAtomicQueryMTP PUBLIC CIRCUIT_NAME=credentialAtomicQueryMTP)
+target_compile_definitions(witnesscalc_credentialAtomicQueryMTPStatic PUBLIC CIRCUIT_NAME=credentialAtomicQueryMTP)
+target_compile_definitions(credentialAtomicQueryMTP PUBLIC CIRCUIT_NAME=credentialAtomicQueryMTP)

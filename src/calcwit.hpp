@@ -12,6 +12,8 @@
 
 #define NMUTEXES 12 //512
 
+namespace CIRCUIT_NAME {
+
 u64 fnv1a(std::string s);
 
 class Circom_CalcWit {
@@ -64,5 +66,7 @@ private:
 };
 
 typedef void (*Circom_TemplateFunction)(unsigned int __cIdx, Circom_CalcWit* __ctx); 
+
+} // namespace
 
 #endif // CIRCOM_CALCWIT_H
