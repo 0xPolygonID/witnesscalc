@@ -17,11 +17,18 @@ git submodule init
 git submodule update
 ```
 
-### Compile witnesscalc for host machine
+### Compile witnesscalc for x86_64 host machine
 
 ```sh
 ./build_gmp.sh host
 make host
+```
+
+### Compile witnesscalc for arm64 host machine
+
+```sh
+./build_gmp.sh host
+make arm64_host
 ```
 
 ### Compile witnesscalc for Android
