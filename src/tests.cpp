@@ -1,75 +1,97 @@
 #include <iostream>
-#include <fstream>
+#include <sstream>
+#include <iomanip>
 #include <string>
 #include <cstdint>
-#include <climits>
 #include <cstring>
-#include <sstream>
 #include "fr.hpp"
-
-using namespace std;
 
 int tests_run = 0;
 int tests_failed = 0;
 
-string from_fr_raw_to_str(FrRawElement val)
+bool is_equal(const FrRawElement a, const FrRawElement b)
 {
-    ostringstream  oss;
-    string result;
-
-    oss << "0x" << std::hex << val[0] << ", "
-        << "0x" << std::hex << val[1] << ", "
-        << "0x" << std::hex << val[2] << ", "
-        << "0x" << std::hex << val[3];
-
-
-    result = oss.str();
-
-    return result;
+    return std::memcmp(a, b, sizeof(FrRawElement)) == 0;
 }
 
-string from_fr_to_str(PFrElement val)
+bool is_equal(const PFrElement a, const PFrElement b)
 {
-    ostringstream  oss;
-    string result;
-
-    oss << "0x" << std::hex << val->shortVal   << ", "
-        << "0x" << std::hex << val->type       << ", "
-        << "0x" << std::hex << val->longVal[0] << ", "
-        << "0x" << std::hex << val->longVal[1] << ", "
-        << "0x" << std::hex << val->longVal[2] << ", "
-        << "0x" << std::hex << val->longVal[3];
-
-
-    result = oss.str();
-
-    return result;
+    return std::memcmp(a, b, sizeof(FrElement)) == 0;
 }
 
-void compare_rawResult(FrRawElement expected, FrRawElement computed, FrRawElement A, FrRawElement B, int idx, std::string TestName)
+std::string format(uint64_t val)
 {
-    if (std::memcmp(expected, computed, sizeof(FrRawElement)))
+    std::ostringstream  oss;
+
+    oss << "0x" << std::hex << std::setw(16) << std::setfill('0') << val;
+
+    return oss.str();
+}
+
+std::string format(uint32_t val)
+{
+    std::ostringstream  oss;
+
+    oss << "0x" << std::hex << std::setw(8) << std::setfill('0') << val;
+
+    return oss.str();
+}
+
+std::string format(int32_t val)
+{
+    std::ostringstream  oss;
+
+    oss << "0x" << std::hex << std::setw(8) << std::setfill('0') << val;
+
+    return oss.str();
+}
+
+std::ostream& operator<<(std::ostream& os, const FrRawElement val)
+{
+    os << format(val[0]) << ","
+       << format(val[1]) << ","
+       << format(val[2]) << ","
+       << format(val[3]);
+
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const PFrElement val)
+{
+    os  << format(val->shortVal) << ", "
+        << format(val->type)     << ", "
+        << val->longVal;
+
+    return os;
+}
+
+template <typename T1, typename T2, typename T3>
+void compare_Result(const T1 expected, const T1 computed, const T2 A, const T3 B, int idx, std::string TestName)
+{
+    if (!is_equal(expected, computed))
     {
-        std::cout << TestName << idx << " failed!" << std::endl;
-        std::cout << "A: " << from_fr_raw_to_str(A) << std::endl;
-        std::cout << "B: " << from_fr_raw_to_str(B) << std::endl;
-        std::cout << "Expected: " << from_fr_raw_to_str(expected) << std::endl;
-        std::cout << "Computed: " << from_fr_raw_to_str(computed) << std::endl;
+        std::cout << TestName << ":" << idx << " failed!" << std::endl;
+        std::cout << "A: " << A << std::endl;
+        std::cout << "B: " << B << std::endl;
+        std::cout << "Expected: " << expected << std::endl;
+        std::cout << "Computed: " << computed << std::endl;
+        std::cout << std::endl;
         tests_failed++;
     }
 
     tests_run++;
 }
 
-void compare_Result(PFrElement expected, PFrElement computed,PFrElement A, PFrElement B, int idx, std::string TestName)
+template <typename T1, typename T2>
+void compare_Result(const T1 expected, const T1 computed, const T2 A, int idx, std::string test_name)
 {
-    if (std::memcmp(expected, computed, sizeof(FrElement)))
+    if (!is_equal(expected, computed))
     {
-        std::cout << TestName << idx << " failed!" << std::endl;
-        std::cout << "A: " << from_fr_to_str(A) << std::endl;
-        std::cout << "B: " << from_fr_to_str(B) << std::endl;
-        std::cout << "Expected: " << from_fr_to_str(expected) << std::endl;
-        std::cout << "Computed: " << from_fr_to_str(computed) << std::endl;
+        std::cout << test_name << ":" << idx << " failed!" << std::endl;
+        std::cout << "A: " << A << std::endl;
+        std::cout << "Expected: " << expected << std::endl;
+        std::cout << "Computed: " << computed << std::endl;
+        std::cout << std::endl;
         tests_failed++;
     }
 
@@ -106,11 +128,11 @@ void Fr_Rw_Neg_unit_test()
     Fr_rawNeg(pRawResult3_c, pRawA3);
     Fr_rawNeg(pRawResult5_c, pRawA5);
 
-    compare_rawResult(pRawResult0, pRawResult0_c, pRawA0, pRawA0, 0, "Fr_Rw_Neg_unit_test");
-    compare_rawResult(pRawResult1, pRawResult1_c, pRawA1, pRawA1, 1, "Fr_Rw_Neg_unit_test");
-    compare_rawResult(pRawResult2, pRawResult2_c, pRawA2, pRawA2, 2, "Fr_Rw_Neg_unit_test");
-    compare_rawResult(pRawResult3, pRawResult3_c, pRawA3, pRawA3, 3, "Fr_Rw_Neg_unit_test");
-    compare_rawResult(pRawResult5, pRawResult5_c, pRawA5, pRawA5, 5, "Fr_Rw_Neg_unit_test");
+    compare_Result(pRawResult0, pRawResult0_c, pRawA0, pRawA0, 0, "Fr_Rw_Neg_unit_test");
+    compare_Result(pRawResult1, pRawResult1_c, pRawA1, pRawA1, 1, "Fr_Rw_Neg_unit_test");
+    compare_Result(pRawResult2, pRawResult2_c, pRawA2, pRawA2, 2, "Fr_Rw_Neg_unit_test");
+    compare_Result(pRawResult3, pRawResult3_c, pRawA3, pRawA3, 3, "Fr_Rw_Neg_unit_test");
+    compare_Result(pRawResult5, pRawResult5_c, pRawA5, pRawA5, 5, "Fr_Rw_Neg_unit_test");
 }
 
 void Fr_Rw_copy_unit_test()
@@ -138,10 +160,10 @@ void Fr_Rw_copy_unit_test()
     Fr_rawCopy(pRawResult2_c, pRawA2);
     Fr_rawCopy(pRawResult3_c, pRawA3);
 
-    compare_rawResult(pRawResult0, pRawResult0_c, pRawA0, pRawA0, 0, "Fr_Rw_copy_unit_test");
-    compare_rawResult(pRawResult1, pRawResult1_c, pRawA1, pRawA1, 1, "Fr_Rw_copy_unit_test");
-    compare_rawResult(pRawResult2, pRawResult2_c, pRawA2, pRawA2, 2, "Fr_Rw_copy_unit_test");
-    compare_rawResult(pRawResult3, pRawResult3_c, pRawA3, pRawA3, 3, "Fr_Rw_copy_unit_test");
+    compare_Result(pRawResult0, pRawResult0_c, pRawA0, pRawA0, 0, "Fr_Rw_copy_unit_test");
+    compare_Result(pRawResult1, pRawResult1_c, pRawA1, pRawA1, 1, "Fr_Rw_copy_unit_test");
+    compare_Result(pRawResult2, pRawResult2_c, pRawA2, pRawA2, 2, "Fr_Rw_copy_unit_test");
+    compare_Result(pRawResult3, pRawResult3_c, pRawA3, pRawA3, 3, "Fr_Rw_copy_unit_test");
 }
 
 
@@ -181,11 +203,11 @@ void Fr_Rw_add_unit_test()
     Fr_rawAdd(pRawResult6_c, pRawA6, pRawB6);
 
 
-    compare_rawResult(pRawResult0, pRawResult0_c, pRawA0, pRawB0, 0, "Fr_Rw_add_unit_test");
-    compare_rawResult(pRawResult1, pRawResult1_c, pRawA1, pRawB1, 1, "Fr_Rw_add_unit_test");
-    compare_rawResult(pRawResult2, pRawResult2_c, pRawA2, pRawB2, 2, "Fr_Rw_add_unit_test");
-    compare_rawResult(pRawResult3, pRawResult3_c, pRawA3, pRawB3, 3, "Fr_Rw_add_unit_test");
-    compare_rawResult(pRawResult6, pRawResult6_c, pRawA6, pRawB6, 6, "Fr_Rw_add_unit_test");
+    compare_Result(pRawResult0, pRawResult0_c, pRawA0, pRawB0, 0, "Fr_Rw_add_unit_test");
+    compare_Result(pRawResult1, pRawResult1_c, pRawA1, pRawB1, 1, "Fr_Rw_add_unit_test");
+    compare_Result(pRawResult2, pRawResult2_c, pRawA2, pRawB2, 2, "Fr_Rw_add_unit_test");
+    compare_Result(pRawResult3, pRawResult3_c, pRawA3, pRawB3, 3, "Fr_Rw_add_unit_test");
+    compare_Result(pRawResult6, pRawResult6_c, pRawA6, pRawB6, 6, "Fr_Rw_add_unit_test");
 }
 
 void Fr_Rw_sub_unit_test()
@@ -217,10 +239,10 @@ void Fr_Rw_sub_unit_test()
     Fr_rawSub(pRawResult2_c, pRawA2, pRawB2);
     Fr_rawSub(pRawResult3_c, pRawA3, pRawB3);
 
-    compare_rawResult(pRawResult0, pRawResult0_c, pRawA0, pRawB0, 0, "Fr_Rw_sub_unit_test");
-    compare_rawResult(pRawResult1, pRawResult1_c, pRawA1, pRawB1, 1, "Fr_Rw_sub_unit_test");
-    compare_rawResult(pRawResult2, pRawResult2_c, pRawA2, pRawB2, 2, "Fr_Rw_sub_unit_test");
-    compare_rawResult(pRawResult3, pRawResult3_c, pRawA3, pRawB3, 3, "Fr_Rw_sub_unit_test");
+    compare_Result(pRawResult0, pRawResult0_c, pRawA0, pRawB0, 0, "Fr_Rw_sub_unit_test");
+    compare_Result(pRawResult1, pRawResult1_c, pRawA1, pRawB1, 1, "Fr_Rw_sub_unit_test");
+    compare_Result(pRawResult2, pRawResult2_c, pRawA2, pRawB2, 2, "Fr_Rw_sub_unit_test");
+    compare_Result(pRawResult3, pRawResult3_c, pRawA3, pRawB3, 3, "Fr_Rw_sub_unit_test");
 
 
 }
@@ -272,13 +294,13 @@ void Fr_Rw_mul_unit_test()
     Fr_rawMMul(pRawResult5_c, pRawA5, pRawB5);
     Fr_rawMMul(pRawResult8_c, pRawA8, pRawB8);
 
-    compare_rawResult(pRawResult0, pRawResult0_c, pRawA0, pRawB0, 0, "Fr_Rw_mul_unit_test");
-    compare_rawResult(pRawResult1, pRawResult1_c, pRawA1, pRawB1, 1, "Fr_Rw_mul_unit_test");
-    compare_rawResult(pRawResult2, pRawResult2_c, pRawA2, pRawB2, 2, "Fr_Rw_mul_unit_test");
-    compare_rawResult(pRawResult3, pRawResult3_c, pRawA3, pRawB3, 3, "Fr_Rw_mul_unit_test");
-    compare_rawResult(pRawResult1, pRawResult1_c, pRawA4, pRawB4, 4, "Fr_Rw_mul_unit_test");
-    compare_rawResult(pRawResult2, pRawResult2_c, pRawA5, pRawB5, 5, "Fr_Rw_mul_unit_test");
-    compare_rawResult(pRawResult3, pRawResult3_c, pRawA8, pRawB8, 8, "Fr_Rw_mul_unit_test");
+    compare_Result(pRawResult0, pRawResult0_c, pRawA0, pRawB0, 0, "Fr_Rw_mul_unit_test");
+    compare_Result(pRawResult1, pRawResult1_c, pRawA1, pRawB1, 1, "Fr_Rw_mul_unit_test");
+    compare_Result(pRawResult2, pRawResult2_c, pRawA2, pRawB2, 2, "Fr_Rw_mul_unit_test");
+    compare_Result(pRawResult3, pRawResult3_c, pRawA3, pRawB3, 3, "Fr_Rw_mul_unit_test");
+    compare_Result(pRawResult1, pRawResult1_c, pRawA4, pRawB4, 4, "Fr_Rw_mul_unit_test");
+    compare_Result(pRawResult2, pRawResult2_c, pRawA5, pRawB5, 5, "Fr_Rw_mul_unit_test");
+    compare_Result(pRawResult3, pRawResult3_c, pRawA8, pRawB8, 8, "Fr_Rw_mul_unit_test");
 
 
 }
@@ -308,10 +330,10 @@ void Fr_Rw_Msquare_unit_test()
     Fr_rawMSquare(pRawResult2_c, pRawA2);
     Fr_rawMSquare(pRawResult3_c, pRawA3);
 
-    compare_rawResult(pRawResult0, pRawResult0_c, pRawA0, pRawA0, 0, "Fr_Rw_Msquare_unit_test");
-    compare_rawResult(pRawResult1, pRawResult1_c, pRawA1, pRawA1, 1, "Fr_Rw_Msquare_unit_test");
-    compare_rawResult(pRawResult2, pRawResult2_c, pRawA2, pRawA2, 2, "Fr_Rw_Msquare_unit_test");
-    compare_rawResult(pRawResult3, pRawResult3_c, pRawA3, pRawA3, 3, "Fr_Rw_Msquare_unit_test");
+    compare_Result(pRawResult0, pRawResult0_c, pRawA0, pRawA0, 0, "Fr_Rw_Msquare_unit_test");
+    compare_Result(pRawResult1, pRawResult1_c, pRawA1, pRawA1, 1, "Fr_Rw_Msquare_unit_test");
+    compare_Result(pRawResult2, pRawResult2_c, pRawA2, pRawA2, 2, "Fr_Rw_Msquare_unit_test");
+    compare_Result(pRawResult3, pRawResult3_c, pRawA3, pRawA3, 3, "Fr_Rw_Msquare_unit_test");
 }
 
 void Fr_Rw_mul1_unit_test()
@@ -349,11 +371,11 @@ void Fr_Rw_mul1_unit_test()
     Fr_rawMMul1(pRawResult3_c, pRawA3, pRawB3[0]);
     Fr_rawMMul1(pRawResult9_c, pRawA9, pRawB9[0]);
 
-    compare_rawResult(pRawResult0, pRawResult0_c, pRawA0, pRawB0, 0, "Fr_Rw_mul1_unit_test");
-    compare_rawResult(pRawResult1, pRawResult1_c, pRawA1, pRawB1, 1, "Fr_Rw_mul1_unit_test");
-    compare_rawResult(pRawResult2, pRawResult2_c, pRawA2, pRawB2, 2, "Fr_Rw_mul1_unit_test");
-    compare_rawResult(pRawResult3, pRawResult3_c, pRawA3, pRawB3, 3, "Fr_Rw_mul1_unit_test");
-    compare_rawResult(pRawResult9, pRawResult9_c, pRawA9, pRawB9, 9, "Fr_Rw_mul1_unit_test");
+    compare_Result(pRawResult0, pRawResult0_c, pRawA0, pRawB0, 0, "Fr_Rw_mul1_unit_test");
+    compare_Result(pRawResult1, pRawResult1_c, pRawA1, pRawB1, 1, "Fr_Rw_mul1_unit_test");
+    compare_Result(pRawResult2, pRawResult2_c, pRawA2, pRawB2, 2, "Fr_Rw_mul1_unit_test");
+    compare_Result(pRawResult3, pRawResult3_c, pRawA3, pRawB3, 3, "Fr_Rw_mul1_unit_test");
+    compare_Result(pRawResult9, pRawResult9_c, pRawA9, pRawB9, 9, "Fr_Rw_mul1_unit_test");
 
 }
 
@@ -382,10 +404,10 @@ void Fr_Rw_ToMontgomery_unit_test()
     Fr_rawToMontgomery(pRawResult2_c, pRawA2);
     Fr_rawToMontgomery(pRawResult3_c, pRawA3);
 
-    compare_rawResult(pRawResult0, pRawResult0_c, pRawA0, pRawA0, 0, "Fr_Rw_ToMontgomery_unit_test");
-    compare_rawResult(pRawResult1, pRawResult1_c, pRawA1, pRawA1, 1, "Fr_Rw_ToMontgomery_unit_test");
-    compare_rawResult(pRawResult2, pRawResult2_c, pRawA2, pRawA2, 2, "Fr_Rw_ToMontgomery_unit_test");
-    compare_rawResult(pRawResult3, pRawResult3_c, pRawA3, pRawA3, 3, "Fr_Rw_ToMontgomery_unit_test");
+    compare_Result(pRawResult0, pRawResult0_c, pRawA0, pRawA0, 0, "Fr_Rw_ToMontgomery_unit_test");
+    compare_Result(pRawResult1, pRawResult1_c, pRawA1, pRawA1, 1, "Fr_Rw_ToMontgomery_unit_test");
+    compare_Result(pRawResult2, pRawResult2_c, pRawA2, pRawA2, 2, "Fr_Rw_ToMontgomery_unit_test");
+    compare_Result(pRawResult3, pRawResult3_c, pRawA3, pRawA3, 3, "Fr_Rw_ToMontgomery_unit_test");
 }
 
 void Fr_Rw_IsEq_unit_test()
@@ -424,11 +446,11 @@ void Fr_Rw_IsEq_unit_test()
     pRawResult3_c[0] = Fr_rawIsEq(pRawA3, pRawB3);
     pRawResult7_c[0] = Fr_rawIsEq(pRawA7, pRawB7);
 
-    compare_rawResult(pRawResult0, pRawResult0_c, pRawA0, pRawB0, 0, "Fr_Rw_IsEq_unit_test");
-    compare_rawResult(pRawResult1, pRawResult1_c, pRawA1, pRawB1, 1, "Fr_Rw_IsEq_unit_test");
-    compare_rawResult(pRawResult2, pRawResult2_c, pRawA2, pRawB2, 2, "Fr_Rw_IsEq_unit_test");
-    compare_rawResult(pRawResult3, pRawResult3_c, pRawA3, pRawB3, 3, "Fr_Rw_IsEq_unit_test");
-    compare_rawResult(pRawResult7, pRawResult7_c, pRawA7, pRawB7, 7, "Fr_Rw_IsEq_unit_test");
+    compare_Result(pRawResult0, pRawResult0_c, pRawA0, pRawB0, 0, "Fr_Rw_IsEq_unit_test");
+    compare_Result(pRawResult1, pRawResult1_c, pRawA1, pRawB1, 1, "Fr_Rw_IsEq_unit_test");
+    compare_Result(pRawResult2, pRawResult2_c, pRawA2, pRawB2, 2, "Fr_Rw_IsEq_unit_test");
+    compare_Result(pRawResult3, pRawResult3_c, pRawA3, pRawB3, 3, "Fr_Rw_IsEq_unit_test");
+    compare_Result(pRawResult7, pRawResult7_c, pRawA7, pRawB7, 7, "Fr_Rw_IsEq_unit_test");
 }
 
 void Fr_rawIsZero_unit_test()
@@ -462,11 +484,11 @@ void Fr_rawIsZero_unit_test()
     pRawResult3_c[0] = Fr_rawIsZero(pRawA3);
     pRawResult5_c[0] = Fr_rawIsZero(pRawA5);
 
-    compare_rawResult(pRawResult0, pRawResult0_c, pRawA0, pRawA0, 0, "Fr_rawIsZero_unit_test");
-    compare_rawResult(pRawResult1, pRawResult1_c, pRawA1, pRawA1, 1, "Fr_rawIsZero_unit_test");
-    compare_rawResult(pRawResult2, pRawResult2_c, pRawA2, pRawA2, 2, "Fr_rawIsZero_unit_test");
-    compare_rawResult(pRawResult3, pRawResult3_c, pRawA3, pRawA3, 3, "Fr_rawIsZero_unit_test");
-    compare_rawResult(pRawResult5, pRawResult5_c, pRawA5, pRawA5, 5, "Fr_rawIsZero_unit_test");
+    compare_Result(pRawResult0, pRawResult0_c, pRawA0, pRawA0, 0, "Fr_rawIsZero_unit_test");
+    compare_Result(pRawResult1, pRawResult1_c, pRawA1, pRawA1, 1, "Fr_rawIsZero_unit_test");
+    compare_Result(pRawResult2, pRawResult2_c, pRawA2, pRawA2, 2, "Fr_rawIsZero_unit_test");
+    compare_Result(pRawResult3, pRawResult3_c, pRawA3, pRawA3, 3, "Fr_rawIsZero_unit_test");
+    compare_Result(pRawResult5, pRawResult5_c, pRawA5, pRawA5, 5, "Fr_rawIsZero_unit_test");
 }
 
 void Fr_Rw_FromMontgomery_unit_test()
@@ -494,10 +516,10 @@ void Fr_Rw_FromMontgomery_unit_test()
     Fr_rawFromMontgomery(pRawResult2_c, pRawA2);
     Fr_rawFromMontgomery(pRawResult3_c, pRawA3);
 
-    compare_rawResult(pRawResult0, pRawResult0_c, pRawA0, pRawA0, 0, "Fr_Rw_FromMontgomery_unit_test");
-    compare_rawResult(pRawResult1, pRawResult1_c, pRawA1, pRawA1, 1, "Fr_Rw_FromMontgomery_unit_test");
-    compare_rawResult(pRawResult2, pRawResult2_c, pRawA2, pRawA2, 2, "Fr_Rw_FromMontgomery_unit_test");
-    compare_rawResult(pRawResult3, pRawResult3_c, pRawA3, pRawA3, 3, "Fr_Rw_FromMontgomery_unit_test");
+    compare_Result(pRawResult0, pRawResult0_c, pRawA0, pRawA0, 0, "Fr_Rw_FromMontgomery_unit_test");
+    compare_Result(pRawResult1, pRawResult1_c, pRawA1, pRawA1, 1, "Fr_Rw_FromMontgomery_unit_test");
+    compare_Result(pRawResult2, pRawResult2_c, pRawA2, pRawA2, 2, "Fr_Rw_FromMontgomery_unit_test");
+    compare_Result(pRawResult3, pRawResult3_c, pRawA3, pRawA3, 3, "Fr_Rw_FromMontgomery_unit_test");
 }
 
 
@@ -1825,25 +1847,6 @@ void Fr_add_s1l2n_unit_test()
     compare_Result(&pResult_s1l2n3, &Result3_c,&pA_s1l2n3, &pB_s1l2n3, 3, "Fr_add_s1l2n_unit_test");
 }
 
-
-void compare_rawResult2(FrRawElement expected, FrRawElement computed, PFrElement A, PFrElement B, int idx, std::string TestName)
-{
-    if (expected[0] != computed[0] ||
-        expected[1] != computed[1] ||
-        expected[2] != computed[2] ||
-        expected[3] != computed[3])
-    {
-        std::cout << TestName << idx << " failed!" << std::endl;
-        std::cout << "A: " << from_fr_to_str(A) << std::endl;
-        std::cout << "B: " << from_fr_to_str(B) << std::endl;
-        std::cout << "Expected: " << from_fr_raw_to_str(expected) << std::endl;
-        std::cout << "Computed: " << from_fr_raw_to_str(computed) << std::endl;
-        tests_failed++;
-    }
-
-    tests_run++;
-}
-
 void Fr_toInt_unit_test()
 {
     //Fr_toInt_test 0:
@@ -1864,9 +1867,9 @@ void Fr_toInt_unit_test()
     pRawResult1_c[0] = Fr_toInt(&pA1);
     pRawResult2_c[0] = Fr_toInt(&pA2);
 
-    compare_rawResult2(pRawResult0, pRawResult0_c,&pA0,&pA0, 0, "Fr_toInt_unit_test");
-    compare_rawResult2(pRawResult1, pRawResult1_c,&pA1,&pA1, 1, "Fr_toInt_unit_test");
-    compare_rawResult2(pRawResult2, pRawResult2_c,&pA2,&pA2, 2, "Fr_toInt_unit_test");
+    compare_Result(pRawResult0, pRawResult0_c,&pA0,&pA0, 0, "Fr_toInt_unit_test");
+    compare_Result(pRawResult1, pRawResult1_c,&pA1,&pA1, 1, "Fr_toInt_unit_test");
+    compare_Result(pRawResult2, pRawResult2_c,&pA2,&pA2, 2, "Fr_toInt_unit_test");
     //compare_rawResult(pRawResult3, pRawResult3_c,pA2,pA2, 3, "Fr_toInt_unit_test");
 }
 
@@ -4511,6 +4514,228 @@ void Fr_shr_unit_test()
     compare_Result(&pResult8, &Result8_c,&pA8, &pB8, 8, "Fr_shr_unit_test");
 }
 
+void Fr_rawShr_test(FrRawElement r_expected, FrRawElement a, uint64_t b)
+{
+    FrRawElement r_computed = {0xbadbadbadbadbadb,0xadbadbadbadbadba,0xdbadbadbadbadbad,0xbadbadbadbadbadb};
+
+    Fr_rawShr(r_computed, a, b);
+
+    compare_Result(r_expected, r_computed, a, b, (int)b, __func__);
+}
+
+void Fr_rawShr_unit_test()
+{
+    FrRawElement rawA1     = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff};
+    FrRawElement rawA2     = {0xaaaaaaaaaaaaaaaa,0xaaaaaaaaaaaaaaaa,0xaaaaaaaaaaaaaaaa,0xaaaaaaaaaaaaaaaa};
+
+    FrRawElement result1   = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x7fffffffffffffff};
+    FrRawElement result2   = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x3fffffffffffffff};
+    FrRawElement result3   = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x1fffffffffffffff};
+    FrRawElement result4   = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x0fffffffffffffff};
+
+    FrRawElement result7   = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x01ffffffffffffff};
+    FrRawElement result8   = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x00ffffffffffffff};
+    FrRawElement result9   = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x007fffffffffffff};
+
+    FrRawElement result15  = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x0001ffffffffffff};
+    FrRawElement result16  = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x0000ffffffffffff};
+    FrRawElement result17  = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x00007fffffffffff};
+
+    FrRawElement result30  = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x00000003ffffffff};
+    FrRawElement result31  = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x00000001ffffffff};
+    FrRawElement result32  = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x00000000ffffffff};
+    FrRawElement result33  = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x000000007fffffff};
+    FrRawElement result34  = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x000000003fffffff};
+
+    FrRawElement result63  = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x0000000000000001};
+    FrRawElement result64  = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0x0000000000000000};
+    FrRawElement result65  = {0xffffffffffffffff,0xffffffffffffffff,0x7fffffffffffffff,0x0000000000000000};
+
+    FrRawElement result95  = {0xffffffffffffffff,0xffffffffffffffff,0x00000001ffffffff,0x0000000000000000};
+    FrRawElement result96  = {0xffffffffffffffff,0xffffffffffffffff,0x00000000ffffffff,0x0000000000000000};
+    FrRawElement result97  = {0xffffffffffffffff,0xffffffffffffffff,0x000000007fffffff,0x0000000000000000};
+
+    FrRawElement result127 = {0xffffffffffffffff,0xffffffffffffffff,0x0000000000000001,0x0000000000000000};
+    FrRawElement result128 = {0xffffffffffffffff,0xffffffffffffffff,0x0000000000000000,0x0000000000000000};
+    FrRawElement result129 = {0xffffffffffffffff,0x7fffffffffffffff,0x0000000000000000,0x0000000000000000};
+
+    FrRawElement result159 = {0x5555555555555555,0x0000000155555555,0x0000000000000000,0x0000000000000000};
+    FrRawElement result160 = {0xaaaaaaaaaaaaaaaa,0x00000000aaaaaaaa,0x0000000000000000,0x0000000000000000};
+    FrRawElement result161 = {0x5555555555555555,0x0000000055555555,0x0000000000000000,0x0000000000000000};
+
+    FrRawElement result191 = {0x5555555555555555,0x0000000000000001,0x0000000000000000,0x0000000000000000};
+    FrRawElement result192 = {0xaaaaaaaaaaaaaaaa,0x0000000000000000,0x0000000000000000,0x0000000000000000};
+    FrRawElement result193 = {0x5555555555555555,0x0000000000000000,0x0000000000000000,0x0000000000000000};
+
+    FrRawElement result223 = {0x0000000155555555,0x0000000000000000,0x0000000000000000,0x0000000000000000};
+    FrRawElement result224 = {0x00000000aaaaaaaa,0x0000000000000000,0x0000000000000000,0x0000000000000000};
+    FrRawElement result225 = {0x0000000055555555,0x0000000000000000,0x0000000000000000,0x0000000000000000};
+
+    FrRawElement result250 = {0x000000000000003f,0x0000000000000000,0x0000000000000000,0x0000000000000000};
+    FrRawElement result251 = {0x000000000000001f,0x0000000000000000,0x0000000000000000,0x0000000000000000};
+    FrRawElement result252 = {0x000000000000000f,0x0000000000000000,0x0000000000000000,0x0000000000000000};
+    FrRawElement result253 = {0x0000000000000007,0x0000000000000000,0x0000000000000000,0x0000000000000000};
+
+    Fr_rawShr_test(result1, rawA1, 1);
+    Fr_rawShr_test(result2, rawA1, 2);
+    Fr_rawShr_test(result3, rawA1, 3);
+    Fr_rawShr_test(result4, rawA1, 4);
+
+    Fr_rawShr_test(result7, rawA1, 7);
+    Fr_rawShr_test(result8, rawA1, 8);
+    Fr_rawShr_test(result9, rawA1, 9);
+
+    Fr_rawShr_test(result15, rawA1, 15);
+    Fr_rawShr_test(result16, rawA1, 16);
+    Fr_rawShr_test(result17, rawA1, 17);
+
+    Fr_rawShr_test(result30, rawA1, 30);
+    Fr_rawShr_test(result31, rawA1, 31);
+    Fr_rawShr_test(result32, rawA1, 32);
+    Fr_rawShr_test(result33, rawA1, 33);
+    Fr_rawShr_test(result34, rawA1, 34);
+
+    Fr_rawShr_test(result63, rawA1, 63);
+    Fr_rawShr_test(result64, rawA1, 64);
+    Fr_rawShr_test(result65, rawA1, 65);
+
+    Fr_rawShr_test(result95, rawA1, 95);
+    Fr_rawShr_test(result96, rawA1, 96);
+    Fr_rawShr_test(result97, rawA1, 97);
+
+    Fr_rawShr_test(result127, rawA1, 127);
+    Fr_rawShr_test(result128, rawA1, 128);
+    Fr_rawShr_test(result129, rawA1, 129);
+
+    Fr_rawShr_test(result159, rawA2, 159);
+    Fr_rawShr_test(result160, rawA2, 160);
+    Fr_rawShr_test(result161, rawA2, 161);
+
+    Fr_rawShr_test(result191, rawA2, 191);
+    Fr_rawShr_test(result192, rawA2, 192);
+    Fr_rawShr_test(result193, rawA2, 193);
+
+    Fr_rawShr_test(result223, rawA2, 223);
+    Fr_rawShr_test(result224, rawA2, 224);
+    Fr_rawShr_test(result225, rawA2, 225);
+
+    Fr_rawShr_test(result250, rawA1, 250);
+    Fr_rawShr_test(result251, rawA1, 251);
+    Fr_rawShr_test(result252, rawA1, 252);
+    Fr_rawShr_test(result253, rawA1, 253);
+}
+
+void Fr_rawShl_test(FrRawElement r_expected, FrRawElement a, uint64_t b)
+{
+    FrRawElement r_computed = {0xbadbadbadbadbadb,0xadbadbadbadbadba,0xdbadbadbadbadbad,0xbadbadbadbadbadb};
+
+    Fr_rawShl(r_computed, a, b);
+
+    compare_Result(r_expected, r_computed, a, b, (int)b, __func__);
+}
+
+void Fr_rawShl_unit_test()
+{
+    FrRawElement rawA1     = {0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff,0xffffffffffffffff};
+    FrRawElement rawA2     = {0xaaaaaaaaaaaaaaaa,0xaaaaaaaaaaaaaaaa,0xaaaaaaaaaaaaaaaa,0xaaaaaaaaaaaaaaaa};
+
+    FrRawElement result1   = {0xbc1e0a6c0ffffffd,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+    FrRawElement result2   = {0xbc1e0a6c0ffffffb,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+    FrRawElement result3   = {0xbc1e0a6c0ffffff7,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+    FrRawElement result4   = {0xbc1e0a6c0fffffef,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+
+    FrRawElement result7   = {0xbc1e0a6c0fffff7f,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+    FrRawElement result8   = {0xbc1e0a6c0ffffeff,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+    FrRawElement result9   = {0xbc1e0a6c0ffffdff,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+
+    FrRawElement result15  = {0xbc1e0a6c0fff7fff,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+    FrRawElement result16  = {0xbc1e0a6c0ffeffff,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+    FrRawElement result17  = {0xbc1e0a6c0ffdffff,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+
+    FrRawElement result30  = {0xbc1e0a6bcfffffff,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+    FrRawElement result31  = {0xbc1e0a6b8fffffff,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+    FrRawElement result32  = {0xbc1e0a6b0fffffff,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+    FrRawElement result33  = {0xbc1e0a6a0fffffff,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+    FrRawElement result34  = {0xbc1e0a680fffffff,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+
+    FrRawElement result63  = {0x3c1e0a6c0fffffff,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+    FrRawElement result64  = {0xbc1e0a6c0fffffff,0xd7cc17b786468f6d,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+    FrRawElement result65  = {0xbc1e0a6c0fffffff,0xd7cc17b786468f6c,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+
+    FrRawElement result95  = {0xbc1e0a6c0fffffff,0xd7cc17b706468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+    FrRawElement result96  = {0xbc1e0a6c0fffffff,0xd7cc17b686468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+    FrRawElement result97  = {0xbc1e0a6c0fffffff,0xd7cc17b586468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+
+    FrRawElement result127 = {0xbc1e0a6c0fffffff,0x57cc17b786468f6e,0x47afba497e7ea7a2,0x0f9bb18d1ece5fd6};
+    FrRawElement result128 = {0xbc1e0a6c0fffffff,0xd7cc17b786468f6e,0x47afba497e7ea7a1,0x0f9bb18d1ece5fd6};
+    FrRawElement result129 = {0xbc1e0a6c0fffffff,0xd7cc17b786468f6e,0x47afba497e7ea7a0,0x0f9bb18d1ece5fd6};
+
+    FrRawElement result159 = {0x0000000000000000,0x0000000000000000,0x5555555500000000,0x1555555555555555};
+    FrRawElement result160 = {0x0000000000000000,0x0000000000000000,0xaaaaaaaa00000000,0x2aaaaaaaaaaaaaaa};
+    FrRawElement result161 = {0x0000000000000000,0x0000000000000000,0x5555555400000000,0x1555555555555555};
+
+    FrRawElement result191 = {0x0000000000000000,0x0000000000000000,0x0000000000000000,0x1555555555555555};
+    FrRawElement result192 = {0x0000000000000000,0x0000000000000000,0x0000000000000000,0x2aaaaaaaaaaaaaaa};
+    FrRawElement result193 = {0x0000000000000000,0x0000000000000000,0x0000000000000000,0x1555555555555554};
+
+    FrRawElement result223 = {0x0000000000000000,0x0000000000000000,0x0000000000000000,0x1555555500000000};
+    FrRawElement result224 = {0x0000000000000000,0x0000000000000000,0x0000000000000000,0x2aaaaaaa00000000};
+    FrRawElement result225 = {0x0000000000000000,0x0000000000000000,0x0000000000000000,0x1555555400000000};
+
+    FrRawElement result250 = {0xbc1e0a6c0fffffff,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x0b9bb18d1ece5fd6};
+    FrRawElement result251 = {0xbc1e0a6c0fffffff,0xd7cc17b786468f6e,0x47afba497e7ea7a2,0x079bb18d1ece5fd6};
+    FrRawElement result252 = {0x0000000000000000,0x0000000000000000,0x0000000000000000,0x3000000000000000};
+    FrRawElement result253 = {0x0000000000000000,0x0000000000000000,0x0000000000000000,0x2000000000000000};
+
+    Fr_rawShl_test(result1, rawA1, 1);
+    Fr_rawShl_test(result2, rawA1, 2);
+    Fr_rawShl_test(result3, rawA1, 3);
+    Fr_rawShl_test(result4, rawA1, 4);
+
+    Fr_rawShl_test(result7, rawA1, 7);
+    Fr_rawShl_test(result8, rawA1, 8);
+    Fr_rawShl_test(result9, rawA1, 9);
+
+    Fr_rawShl_test(result15, rawA1, 15);
+    Fr_rawShl_test(result16, rawA1, 16);
+    Fr_rawShl_test(result17, rawA1, 17);
+
+    Fr_rawShl_test(result30, rawA1, 30);
+    Fr_rawShl_test(result31, rawA1, 31);
+    Fr_rawShl_test(result32, rawA1, 32);
+    Fr_rawShl_test(result33, rawA1, 33);
+    Fr_rawShl_test(result34, rawA1, 34);
+
+    Fr_rawShl_test(result63, rawA1, 63);
+    Fr_rawShl_test(result64, rawA1, 64);
+    Fr_rawShl_test(result65, rawA1, 65);
+
+    Fr_rawShl_test(result95, rawA1, 95);
+    Fr_rawShl_test(result96, rawA1, 96);
+    Fr_rawShl_test(result97, rawA1, 97);
+
+    Fr_rawShl_test(result127, rawA1, 127);
+    Fr_rawShl_test(result128, rawA1, 128);
+    Fr_rawShl_test(result129, rawA1, 129);
+
+    Fr_rawShl_test(result159, rawA2, 159);
+    Fr_rawShl_test(result160, rawA2, 160);
+    Fr_rawShl_test(result161, rawA2, 161);
+
+    Fr_rawShl_test(result191, rawA2, 191);
+    Fr_rawShl_test(result192, rawA2, 192);
+    Fr_rawShl_test(result193, rawA2, 193);
+
+    Fr_rawShl_test(result223, rawA2, 223);
+    Fr_rawShl_test(result224, rawA2, 224);
+    Fr_rawShl_test(result225, rawA2, 225);
+
+    Fr_rawShl_test(result250, rawA1, 250);
+    Fr_rawShl_test(result251, rawA1, 251);
+    Fr_rawShl_test(result252, rawA1, 252);
+    Fr_rawShl_test(result253, rawA1, 253);
+}
+
 void print_results()
 {
     std::cout << "Results: " << std::dec << tests_run << " tests were run, " << tests_failed << " failed." << std::endl;
@@ -4642,6 +4867,8 @@ int main()
     Fr_toInt_unit_test();
     Fr_neg_unit_test();
     Fr_shr_unit_test();
+    Fr_rawShr_unit_test();
+    Fr_rawShl_unit_test();
 
     print_results();
 
