@@ -11,9 +11,14 @@ arm64_host:
 	cmake .. -DTARGET_PLATFORM=arm64_host -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../package && \
 	make -j4 -vvv && make install
 
-android:
+android_arm64_v8a:
 	rm -rf build_witnesscalc_android && mkdir build_witnesscalc_android && cd build_witnesscalc_android && \
 	cmake .. -DTARGET_PLATFORM=ANDROID -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../package_android && \
+	make -j4 -vvv && make install
+
+android_x86:
+	rm -rf build_witnesscalc_android_x86 && mkdir build_witnesscalc_android_x86 && cd build_witnesscalc_android_x86 && \
+	cmake .. -DTARGET_PLATFORM=ANDROID_x86 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../package_android_x86 && \
 	make -j4 -vvv && make install
 
 android_x86_64:
@@ -25,4 +30,6 @@ ios:
 	rm -rf build_witnesscalc_ios && mkdir build_witnesscalc_ios && cd build_witnesscalc_ios && \
 	cmake .. -GXcode -DTARGET_PLATFORM=IOS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../package_ios && \
     echo "" && echo "Now open Xcode and compile the generated project" && echo ""
+
+android: android_arm64_v8a android_x86 android_x86_64
 

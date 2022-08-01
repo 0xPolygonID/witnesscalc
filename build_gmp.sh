@@ -9,6 +9,7 @@ usage()
     echo "where"
     echo "    android:        build for Android arm64"
     echo "    android_x86_64: build for Android x86_64"
+    echo "    android_x86:    build for Android x86"
     echo "    ios:            build for iOS arm64"
     echo "    host:           build for this host"
 
@@ -99,9 +100,54 @@ build_android()
         return 1
     fi
 
-    export TOOLCHAIN=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64
+    export TOOLCHAIN=$ANDROID_NDK/toolchains/llvm/prebuilt/darwin-x86_64
 
     export TARGET=aarch64-linux-android
+    export API=21
+
+    export AR=$TOOLCHAIN/bin/llvm-ar
+    export CC=$TOOLCHAIN/bin/$TARGET$API-clang
+    export AS=$CC
+    export CXX=$TOOLCHAIN/bin/$TARGET$API-clang++
+    export LD=$TOOLCHAIN/bin/ld
+    export RANLIB=$TOOLCHAIN/bin/llvm-ranlib
+    export STRIP=$TOOLCHAIN/bin/llvm-strip
+
+    echo $TOOLCHAIN
+    echo $TARGET
+
+    rm -rf "$BUILD_DIR"
+    mkdir "$BUILD_DIR"
+    cd "$BUILD_DIR"
+
+    ../configure --host $TARGET --prefix="$PACKAGE_DIR" --with-pic --disable-fft &&
+    make -j${NPROC} &&
+    make install
+
+    cd ..
+}
+
+build_android_x86()
+{
+    PACKAGE_DIR="$GMP_DIR/package_android_x86"
+    BUILD_DIR=build_android_x86
+
+    if [ -d "$PACKAGE_DIR" ]; then
+        echo "Android package is built already. See $PACKAGE_DIR"
+        return 1
+    fi
+
+    if [ -z $ANDROID_NDK ]; then
+
+        echo "ERROR: ANDROID_NDK environment variable is not set."
+        echo "       It must be an absolute path to the root directory of Android NDK."
+        echo "       For instance /home/test/Android/Sdk/ndk/23.1.7779620"
+        return 1
+    fi
+
+    export TOOLCHAIN=$ANDROID_NDK/toolchains/llvm/prebuilt/darwin-x86_64
+
+    export TARGET=i686-linux-android
     export API=21
 
     export AR=$TOOLCHAIN/bin/llvm-ar
@@ -144,7 +190,7 @@ build_android_x86_64()
         return 1
     fi
 
-    export TOOLCHAIN=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64
+    export TOOLCHAIN=$ANDROID_NDK/toolchains/llvm/prebuilt/darwin-x86_64
 
     export TARGET=x86_64-linux-android
     export API=21
@@ -232,8 +278,13 @@ case "$TARGET_PLATFORM" in
     ;;
 
     "android" )
-        echo "Building for android"
+        echo "Building for android TTT"
         build_android
+    ;;
+
+    "android_x86" )
+        echo "Building for android x86"
+        build_android_x86
     ;;
 
     "android_x86_64" )
