@@ -35,10 +35,16 @@ if(TARGET_PLATFORM MATCHES "android")
 elseif(TARGET_PLATFORM MATCHES "ios")
 
     set(CMAKE_SYSTEM_NAME iOS)
-    set(CMAKE_OSX_ARCHITECTURES arm64)
 
-    set(GMP_PREFIX ${GMP_ROOT}/package_ios_arm64)
-    set(ARCH arm64)
+    if(TARGET_PLATFORM MATCHES "ios_x86_64")
+        set(CMAKE_OSX_ARCHITECTURES x86_64)
+        set(GMP_PREFIX ${GMP_ROOT}/package_ios_x86_64)
+        set(ARCH x86_64)
+    else()
+        set(CMAKE_OSX_ARCHITECTURES arm64)
+        set(GMP_PREFIX ${GMP_ROOT}/package_ios_arm64)
+        set(ARCH arm64)
+    endif()
 
 elseif(TARGET_PLATFORM MATCHES "aarch64")
 
