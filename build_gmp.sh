@@ -1,5 +1,8 @@
 #!/bin/sh
 
+NPROC=8
+fetch_cmd=$( (type wget > /dev/null 2>&1 && echo "wget") || echo "curl -O" )
+
 usage()
 {
     echo "USAGE: $0 <android|android_x86_64|ios|host>"
@@ -16,10 +19,11 @@ get_gmp()
 {
     GMP_NAME=gmp-6.2.1
     GMP_ARCHIVE=${GMP_NAME}.tar.xz
+    GMP_URL=https://ftp.gnu.org/gnu/gmp/${GMP_ARCHIVE}
 
     if [ ! -f ${GMP_ARCHIVE} ]; then
 
-        wget https://ftp.gnu.org/gnu/gmp/${GMP_ARCHIVE}
+        $fetch_cmd ${GMP_URL}
     fi
 
 
@@ -28,6 +32,32 @@ get_gmp()
         tar -xvf ${GMP_ARCHIVE}
         mv ${GMP_NAME} gmp
     fi
+}
+
+build_aarch64()
+{
+    PACKAGE_DIR="$GMP_DIR/package_aarch64"
+    BUILD_DIR=build_aarch64
+
+    if [ -d "$PACKAGE_DIR" ]; then
+        echo "aarch64 package is built already. See $PACKAGE_DIR"
+        return 1
+    fi
+
+
+    export TARGET=aarch64-linux-gnu
+
+    echo $TARGET
+
+    rm -rf "$BUILD_DIR"
+    mkdir "$BUILD_DIR"
+    cd "$BUILD_DIR"
+
+    ../configure --host $TARGET --prefix="$PACKAGE_DIR" --with-pic --disable-fft &&
+    make -j${NPROC} &&
+    make install
+
+    cd ..
 }
 
 build_host()
@@ -45,7 +75,7 @@ build_host()
     cd "$BUILD_DIR"
 
     ../configure --prefix="$PACKAGE_DIR" --with-pic &&
-    make -j$(nproc) &&
+    make -j${NPROC} &&
     make install
 
     cd ..
@@ -90,7 +120,7 @@ build_android()
     cd "$BUILD_DIR"
 
     ../configure --host $TARGET --prefix="$PACKAGE_DIR" --with-pic --disable-fft &&
-    make -j$(nproc) &&
+    make -j${NPROC} &&
     make install
 
     cd ..
@@ -135,7 +165,7 @@ build_android_x86_64()
     cd "$BUILD_DIR"
 
     ../configure --host $TARGET --prefix="$PACKAGE_DIR" --with-pic --disable-fft &&
-    make -j$(nproc) &&
+    make -j${NPROC} &&
     make install
 
     cd ..
@@ -173,7 +203,45 @@ build_ios()
     cd "$BUILD_DIR"
 
     ../configure --host $TARGET --prefix="$PACKAGE_DIR" --with-pic --disable-fft --disable-assembly &&
-    make -j$(nproc) &&
+    make -j${NPROC} &&
+    make install
+
+    cd ..
+}
+
+build_ios_x86_64()
+{
+    PACKAGE_DIR="$GMP_DIR/package_ios_x86_64"
+    BUILD_DIR=build_ios_x86_64
+
+    if [ -d "$PACKAGE_DIR" ]; then
+        echo "iOS package is built already. See $PACKAGE_DIR"
+        return 1
+    fi
+
+    export SDK="iphonesimulator"
+    export TARGET=x86_64-apple-darwin
+    export MIN_IOS_VERSION=8.0
+
+    export ARCH_FLAGS="-arch x86_64"
+    export OPT_FLAGS="-O3 -g3 -fembed-bitcode"
+    export HOST_FLAGS="${ARCH_FLAGS} -miphoneos-version-min=${MIN_IOS_VERSION} -isysroot $(xcrun --sdk ${SDK} --show-sdk-path)"
+
+    export CC=$(xcrun --find --sdk "${SDK}" clang)
+    export CXX=$(xcrun --find --sdk "${SDK}" clang++)
+    export CPP=$(xcrun --find --sdk "${SDK}" cpp)
+    export CFLAGS="${HOST_FLAGS} ${OPT_FLAGS}"
+    export CXXFLAGS="${HOST_FLAGS} ${OPT_FLAGS}"
+    export LDFLAGS="${HOST_FLAGS}"
+
+    echo $TARGET
+
+    rm -rf "$BUILD_DIR"
+    mkdir "$BUILD_DIR"
+    cd "$BUILD_DIR"
+
+    ../configure --host $TARGET --prefix="$PACKAGE_DIR" --with-pic --disable-fft --disable-assembly &&
+    make -j${NPROC} &&
     make install
 
     cd ..
@@ -201,6 +269,11 @@ case "$TARGET_PLATFORM" in
         build_ios
     ;;
 
+    "ios_x86_64" )
+        echo "Building for ios x86_64"
+        build_ios_x86_64
+    ;;
+
     "android" )
         echo "Building for android"
         build_android
@@ -214,6 +287,11 @@ case "$TARGET_PLATFORM" in
     "host" )
         echo "Building for this host"
         build_host
+    ;;
+
+    "aarch64" )
+        echo "Building for linux aarch64"
+        build_aarch64
     ;;
 
     * )
