@@ -83,6 +83,24 @@ target_compile_definitions(witnesscalc_auth PUBLIC CIRCUIT_NAME=auth)
 target_compile_definitions(witnesscalc_authStatic PUBLIC CIRCUIT_NAME=auth)
 target_compile_definitions(auth PUBLIC CIRCUIT_NAME=auth)
 
+# authV2
+set(AUTHV2_SOURCES ${LIB_SOURCES}
+    authV2.cpp
+    witnesscalc_authV2.h
+    witnesscalc_authV2.cpp
+    )
+
+add_library(witnesscalc_authV2 SHARED ${AUTHV2_SOURCES})
+add_library(witnesscalc_authV2Static STATIC ${AUTHV2_SOURCES})
+set_target_properties(witnesscalc_authV2Static PROPERTIES OUTPUT_NAME witnesscalc_authV2)
+
+add_executable(authV2 main.cpp)
+target_link_libraries(authV2 witnesscalc_authV2Static)
+
+target_compile_definitions(witnesscalc_authV2 PUBLIC CIRCUIT_NAME=authV2)
+target_compile_definitions(witnesscalc_authV2Static PUBLIC CIRCUIT_NAME=authV2)
+target_compile_definitions(authV2 PUBLIC CIRCUIT_NAME=authV2)
+
 # credentialAtomicQuerySig
 set(CREDENTIALATOMICQUERYSIG_SOURCES ${LIB_SOURCES}
     credentialAtomicQuerySig.cpp

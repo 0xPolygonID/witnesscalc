@@ -37,6 +37,9 @@ install(TARGETS
     auth
     witnesscalc_auth
     witnesscalc_authStatic
+    authV2
+    witnesscalc_authV2
+    witnesscalc_authV2Static
     credentialAtomicQuerySig
     witnesscalc_credentialAtomicQuerySig
     witnesscalc_credentialAtomicQuerySigStatic
@@ -57,6 +60,7 @@ install(FILES src/auth.dat src/credentialAtomicQuerySig.dat src/credentialAtomic
 install(FILES
     src/witnesscalc.h
     src/witnesscalc_auth.h
+    src/witnesscalc_authV2.h
     src/witnesscalc_credentialAtomicQuerySig.h
     src/witnesscalc_credentialAtomicQueryMTP.h
     DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
