@@ -68,6 +68,10 @@
 
 
 
+
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;
 ; copy
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -287,10 +291,10 @@ Fr_long:
         jnc     Fr_longNormal
 Fr_longMontgomery:
 
-
         sub  rsp, 40
         push rsi
         mov  rsi, rdi
+        mov  rdi, rsp
         call Fr_toNormal
         pop  rsi
 
