@@ -5,11 +5,13 @@ fetch_cmd=$( (type wget > /dev/null 2>&1 && echo "wget") || echo "curl -O" )
 
 usage()
 {
-    echo "USAGE: $0 <android|android_x86_64|ios|host>"
-    echo "where"
+    echo "USAGE: $0 <target>"
+    echo "where target is one of:"
     echo "    android:        build for Android arm64"
     echo "    android_x86_64: build for Android x86_64"
+    echo "    aarch64:        build for Linux aarch64"
     echo "    ios:            build for iOS arm64"
+    echo "    ios_x86_64:     build for iOS x86_64"
     echo "    host:           build for this host"
 
     exit 1
@@ -74,7 +76,7 @@ build_host()
     mkdir "$BUILD_DIR"
     cd "$BUILD_DIR"
 
-    ../configure --prefix="$PACKAGE_DIR" --with-pic &&
+    ../configure --prefix="$PACKAGE_DIR" --with-pic --disable-fft &&
     make -j${NPROC} &&
     make install
 
