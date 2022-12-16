@@ -19,7 +19,7 @@ u64 fnv1a(std::string s);
 class Circom_CalcWit {
 
   bool *inputSignalAssigned;
-    unsigned int inputSignalAssignedCounter;
+  uint inputSignalAssignedCounter;
 
   Circom_Circuit *circuit;
 
@@ -34,39 +34,40 @@ public:
   // parallelism
   std::mutex numThreadMutex;
   std::condition_variable ntcvs;
-    unsigned int numThread;
+  uint numThread;
 
-    unsigned int maxThread;
+  uint maxThread;
 
   // Functions called by the circuit
-  Circom_CalcWit(Circom_Circuit *aCircuit, unsigned int numTh = NMUTEXES);
+  Circom_CalcWit(Circom_Circuit *aCircuit, uint numTh = NMUTEXES);
   ~Circom_CalcWit();
 
   // Public functions
-  void setInputSignal(u64 h, unsigned int i, FrElement &val);
+  void setInputSignal(u64 h, uint i, FrElement &val);
+  void tryRunCircuit();
   
   u64 getInputSignalSize(u64 h);
 
-  inline unsigned int getRemaingInputsToBeSet() {
+  inline uint getRemaingInputsToBeSet() {
     return inputSignalAssignedCounter;
   }
   
-  inline void getWitness(unsigned int idx, PFrElement val) {
+  inline void getWitness(uint idx, PFrElement val) {
     Fr_copy(val, &signalValues[circuit->witness2SignalList[idx]]);
   }
 
   std::string getTrace(u64 id_cmp);
 
-  std::string generate_position_array(unsigned int* dimensions, unsigned int size_dimensions, unsigned int index);
+  std::string generate_position_array(uint* dimensions, uint size_dimensions, uint index);
 
 private:
   
-  unsigned int getInputSignalHashPosition(u64 h);
+  uint getInputSignalHashPosition(u64 h);
 
 };
 
-typedef void (*Circom_TemplateFunction)(unsigned int __cIdx, Circom_CalcWit* __ctx); 
+typedef void (*Circom_TemplateFunction)(uint __cIdx, Circom_CalcWit* __ctx); 
 
-} // namespace
+} //namespace
 
 #endif // CIRCOM_CALCWIT_H

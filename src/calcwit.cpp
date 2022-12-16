@@ -69,6 +69,12 @@ uint Circom_CalcWit::getInputSignalHashPosition(u64 h) {
   return pos;
 }
 
+void Circom_CalcWit::tryRunCircuit(){ 
+  if (inputSignalAssignedCounter == 0) {
+    run(this);
+  }
+}
+
 void Circom_CalcWit::setInputSignal(u64 h, uint i,  FrElement & val){
   if (inputSignalAssignedCounter == 0) {
     fprintf(stderr, "No more signals to be assigned\n");
@@ -88,9 +94,7 @@ void Circom_CalcWit::setInputSignal(u64 h, uint i,  FrElement & val){
   signalValues[si] = val;
   inputSignalAssigned[si-get_main_input_signal_start()] = true;
   inputSignalAssignedCounter--;
-  if (inputSignalAssignedCounter == 0) {
-    run(this);
-  }
+  tryRunCircuit();
 }
 
 u64 Circom_CalcWit::getInputSignalSize(u64 h) {
@@ -122,4 +126,4 @@ std::string Circom_CalcWit::generate_position_array(uint* dimensions, uint size_
   return positions;
 }
 
-} // namespace
+} //namespace

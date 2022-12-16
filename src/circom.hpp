@@ -50,6 +50,7 @@ struct Circom_Component {
   std::string componentName;
   u64 idFather; 
   u32* subcomponents;
+  bool* subcomponentsParallel;
   bool *outputIsSet;  //one for each output
   std::mutex *mutexes;  //one for each output
   std::condition_variable *cvs;
@@ -74,15 +75,14 @@ PFrElements lvar[];
 
 */
 
-unsigned int get_main_input_signal_start();
-unsigned int get_main_input_signal_no();
-unsigned int get_total_signal_no();
-unsigned int get_number_of_components();
-unsigned int get_size_of_input_hashmap();
-unsigned int get_size_of_witness();
-unsigned int get_size_of_constants();
-unsigned int get_size_of_io_map();
+uint get_main_input_signal_start();
+uint get_main_input_signal_no();
+uint get_total_signal_no();
+uint get_number_of_components();
+uint get_size_of_input_hashmap();
+uint get_size_of_witness();
+uint get_size_of_constants();
+uint get_size_of_io_map();
 
-} // namespace
-
+} //namespace
 #endif  // __CIRCOM_H
