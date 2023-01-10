@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 
 include(cmake/platform.cmake)
 
-set(USE_ASM OFF CACHE BOOL "Use asm implementation for Fr and Fq")
+set(USE_ASM ON CACHE BOOL "Use asm implementation for Fr and Fq")
 
 project(witnesscalc LANGUAGES CXX ASM)
 
@@ -32,20 +32,26 @@ add_subdirectory(src)
 
 
 install(TARGETS
-#    tests
-#    test_platform
-#    auth
-#    witnesscalc_auth
-#    witnesscalc_authStatic
+    tests
+    test_platform
+    auth
+    witnesscalc_auth
+    witnesscalc_authStatic
     authV2
-#    witnesscalc_authV2
-#    witnesscalc_authV2Static
-#    credentialAtomicQuerySig
-#    witnesscalc_credentialAtomicQuerySig
-#    witnesscalc_credentialAtomicQuerySigStatic
-#    credentialAtomicQueryMTP
-#    witnesscalc_credentialAtomicQueryMTP
-#    witnesscalc_credentialAtomicQueryMTPStatic
+    witnesscalc_authV2
+    witnesscalc_authV2Static
+    credentialAtomicQuerySig
+    witnesscalc_credentialAtomicQuerySig
+    witnesscalc_credentialAtomicQuerySigStatic
+    credentialAtomicQueryMTP
+    witnesscalc_credentialAtomicQueryMTP
+    witnesscalc_credentialAtomicQueryMTPStatic
+    credentialAtomicQueryMTPV2
+    witnesscalc_credentialAtomicQueryMTPV2
+    witnesscalc_credentialAtomicQueryMTPV2Static
+    credentialAtomicQuerySigV2
+    witnesscalc_credentialAtomicQuerySigV2
+    witnesscalc_credentialAtomicQuerySigV2Static
     fr
     RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
     BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}/app
@@ -54,13 +60,15 @@ install(TARGETS
 install(FILES "${GMP_LIB_DIR}/${GMP_LIB_FILE}"
     DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 
-install(FILES src/auth.dat src/authV2.dat src/credentialAtomicQuerySig.dat src/credentialAtomicQueryMTP.dat
+install(FILES src/auth.dat src/authV2.dat src/credentialAtomicQuerySig.dat src/credentialAtomicQueryMTP.dat src/credentialAtomicQuerySigV2.dat src/credentialAtomicQueryMTPV2.dat
     DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 install(FILES
-#    src/witnesscalc.h
-#    src/witnesscalc_auth.h
+    src/witnesscalc.h
+    src/witnesscalc_auth.h
     src/witnesscalc_authV2.h
-#    src/witnesscalc_credentialAtomicQuerySig.h
-#    src/witnesscalc_credentialAtomicQueryMTP.h
+    src/witnesscalc_credentialAtomicQuerySig.h
+    src/witnesscalc_credentialAtomicQueryMTP.h
+    src/witnesscalc_credentialAtomicQuerySigV2.h
+    src/witnesscalc_credentialAtomicQueryMTPV2.h
     DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
