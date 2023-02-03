@@ -46,12 +46,12 @@ install(TARGETS
     #credentialAtomicQueryMTP
     #witnesscalc_credentialAtomicQueryMTP
     #witnesscalc_credentialAtomicQueryMTPStatic
-    # credentialAtomicQueryMTPV2
-    # witnesscalc_credentialAtomicQueryMTPV2
-    # witnesscalc_credentialAtomicQueryMTPV2Static
-    # credentialAtomicQuerySigV2
-    # witnesscalc_credentialAtomicQuerySigV2
-    # witnesscalc_credentialAtomicQuerySigV2Static
+    credentialAtomicQueryMTPV2
+    witnesscalc_credentialAtomicQueryMTPV2
+    witnesscalc_credentialAtomicQueryMTPV2Static
+    credentialAtomicQuerySigV2
+    witnesscalc_credentialAtomicQuerySigV2
+    witnesscalc_credentialAtomicQuerySigV2Static
     credentialAtomicQueryMTPV2OnChain
     witnesscalc_credentialAtomicQueryMTPV2OnChain
     witnesscalc_credentialAtomicQueryMTPV2OnChainStatic
@@ -66,7 +66,15 @@ install(TARGETS
 install(FILES "${GMP_LIB_DIR}/${GMP_LIB_FILE}"
     DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 
-install(FILES src/auth.dat src/authV2.dat src/credentialAtomicQuerySig.dat src/credentialAtomicQueryMTP.dat src/credentialAtomicQuerySigV2.dat src/credentialAtomicQueryMTPV2.dat
+install(FILES
+    src/auth.dat
+    src/authV2.dat
+    src/credentialAtomicQuerySig.dat
+    src/credentialAtomicQueryMTP.dat
+    src/credentialAtomicQuerySigV2.dat
+    src/credentialAtomicQueryMTPV2.dat
+    src/credentialAtomicQuerySigV2OnChain.dat
+    src/credentialAtomicQueryMTPV2OnChain.dat
     DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 install(FILES
@@ -75,8 +83,8 @@ install(FILES
     src/witnesscalc_authV2.h
     #src/witnesscalc_credentialAtomicQuerySig.h
     #src/witnesscalc_credentialAtomicQueryMTP.h
-    #src/witnesscalc_credentialAtomicQuerySigV2.h
-    #src/witnesscalc_credentialAtomicQueryMTPV2.h
+    src/witnesscalc_credentialAtomicQuerySigV2.h
+    src/witnesscalc_credentialAtomicQueryMTPV2.h
     src/witnesscalc_credentialAtomicQuerySigV2OnChain.h
     src/witnesscalc_credentialAtomicQueryMTPV2OnChain.h
     DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
