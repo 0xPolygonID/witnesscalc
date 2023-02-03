@@ -1,4 +1,5 @@
 #include "fr.hpp"
+#include <iostream>
 #include <gmp.h>
 #include <cassert>
 #include <string>
