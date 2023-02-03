@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <string>
 #include <gmp.h>
+#include <iostream>
 
 extern FrElement Fr_q;
 extern FrElement Fr_R2;
