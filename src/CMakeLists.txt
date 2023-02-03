@@ -65,23 +65,23 @@ set(LIB_SOURCES
     witnesscalc.cpp
     )
 
-# auth
-set(AUTH_SOURCES ${LIB_SOURCES}
-    auth.cpp
-    witnesscalc_auth.h
-    witnesscalc_auth.cpp
-    )
-
-add_library(witnesscalc_auth SHARED ${AUTH_SOURCES})
-add_library(witnesscalc_authStatic STATIC ${AUTH_SOURCES})
-set_target_properties(witnesscalc_authStatic PROPERTIES OUTPUT_NAME witnesscalc_auth)
-
-add_executable(auth main.cpp)
-target_link_libraries(auth witnesscalc_authStatic)
-
-target_compile_definitions(witnesscalc_auth PUBLIC CIRCUIT_NAME=auth)
-target_compile_definitions(witnesscalc_authStatic PUBLIC CIRCUIT_NAME=auth)
-target_compile_definitions(auth PUBLIC CIRCUIT_NAME=auth)
+# # auth
+# set(AUTH_SOURCES ${LIB_SOURCES}
+#     auth.cpp
+#     witnesscalc_auth.h
+#     witnesscalc_auth.cpp
+#     )
+#
+# add_library(witnesscalc_auth SHARED ${AUTH_SOURCES})
+# add_library(witnesscalc_authStatic STATIC ${AUTH_SOURCES})
+# set_target_properties(witnesscalc_authStatic PROPERTIES OUTPUT_NAME witnesscalc_auth)
+#
+# add_executable(auth main.cpp)
+# target_link_libraries(auth witnesscalc_authStatic)
+#
+# target_compile_definitions(witnesscalc_auth PUBLIC CIRCUIT_NAME=auth)
+# target_compile_definitions(witnesscalc_authStatic PUBLIC CIRCUIT_NAME=auth)
+# target_compile_definitions(auth PUBLIC CIRCUIT_NAME=auth)
 
 # authV2
 set(AUTHV2_SOURCES ${LIB_SOURCES}
@@ -100,7 +100,7 @@ target_link_libraries(authV2 witnesscalc_authV2Static)
 target_compile_definitions(witnesscalc_authV2 PUBLIC CIRCUIT_NAME=authV2)
 target_compile_definitions(witnesscalc_authV2Static PUBLIC CIRCUIT_NAME=authV2)
 target_compile_definitions(authV2 PUBLIC CIRCUIT_NAME=authV2)
-
+#[[
 # credentialAtomicQuerySig
 set(CREDENTIALATOMICQUERYSIG_SOURCES ${LIB_SOURCES}
     credentialAtomicQuerySig.cpp
@@ -171,4 +171,40 @@ target_link_libraries(credentialAtomicQuerySigV2 witnesscalc_credentialAtomicQue
 
 target_compile_definitions(witnesscalc_credentialAtomicQuerySigV2 PUBLIC CIRCUIT_NAME=credentialAtomicQuerySigV2)
 target_compile_definitions(witnesscalc_credentialAtomicQuerySigV2Static PUBLIC CIRCUIT_NAME=credentialAtomicQuerySigV2)
-target_compile_definitions(credentialAtomicQuerySigV2 PUBLIC CIRCUIT_NAME=credentialAtomicQuerySigV2)
+target_compile_definitions(credentialAtomicQuerySigV2 PUBLIC CIRCUIT_NAME=credentialAtomicQuerySigV2)]]
+
+# credentialAtomicQueryMTPV2OnChain
+set(CREDENTIALATOMICQUERYMTPV2ONCHAIN_SOURCES ${LIB_SOURCES}
+    credentialAtomicQueryMTPV2OnChain.cpp
+    witnesscalc_credentialAtomicQueryMTPV2OnChain.h
+    witnesscalc_credentialAtomicQueryMTPV2OnChain.cpp
+    )
+
+add_library(witnesscalc_credentialAtomicQueryMTPV2OnChain SHARED ${CREDENTIALATOMICQUERYMTPV2ONCHAIN_SOURCES})
+add_library(witnesscalc_credentialAtomicQueryMTPV2OnChainStatic STATIC ${CREDENTIALATOMICQUERYMTPV2ONCHAIN_SOURCES})
+set_target_properties(witnesscalc_credentialAtomicQueryMTPV2OnChainStatic PROPERTIES OUTPUT_NAME witnesscalc_credentialAtomicQueryMTPV2OnChain)
+
+add_executable(credentialAtomicQueryMTPV2OnChain main.cpp)
+target_link_libraries(credentialAtomicQueryMTPV2OnChain witnesscalc_credentialAtomicQueryMTPV2OnChainStatic)
+
+target_compile_definitions(witnesscalc_credentialAtomicQueryMTPV2OnChain PUBLIC CIRCUIT_NAME=credentialAtomicQueryMTPV2OnChain)
+target_compile_definitions(witnesscalc_credentialAtomicQueryMTPV2OnChainStatic PUBLIC CIRCUIT_NAME=credentialAtomicQueryMTPV2OnChain)
+target_compile_definitions(credentialAtomicQueryMTPV2OnChain PUBLIC CIRCUIT_NAME=credentialAtomicQueryMTPV2OnChain)
+
+# credentialAtomicQuerySigV2
+set(CREDENTIALATOMICQUERYSIGV2ONCHAIN_SOURCES ${LIB_SOURCES}
+    credentialAtomicQuerySigV2OnChain.cpp
+    witnesscalc_credentialAtomicQuerySigV2OnChain.h
+    witnesscalc_credentialAtomicQuerySigV2OnChain.cpp
+    )
+
+add_library(witnesscalc_credentialAtomicQuerySigV2OnChain SHARED ${CREDENTIALATOMICQUERYSIGV2ONCHAIN_SOURCES})
+add_library(witnesscalc_credentialAtomicQuerySigV2OnChainStatic STATIC ${CREDENTIALATOMICQUERYSIGV2ONCHAIN_SOURCES})
+set_target_properties(witnesscalc_credentialAtomicQuerySigV2OnChainStatic PROPERTIES OUTPUT_NAME witnesscalc_credentialAtomicQuerySigV2OnChain)
+
+add_executable(credentialAtomicQuerySigV2OnChain main.cpp)
+target_link_libraries(credentialAtomicQuerySigV2OnChain witnesscalc_credentialAtomicQuerySigV2OnChainStatic)
+
+target_compile_definitions(witnesscalc_credentialAtomicQuerySigV2OnChain PUBLIC CIRCUIT_NAME=credentialAtomicQuerySigV2OnChain)
+target_compile_definitions(witnesscalc_credentialAtomicQuerySigV2OnChainStatic PUBLIC CIRCUIT_NAME=credentialAtomicQuerySigV2OnChain)
+target_compile_definitions(credentialAtomicQuerySigV2OnChain PUBLIC CIRCUIT_NAME=credentialAtomicQuerySigV2OnChain)
