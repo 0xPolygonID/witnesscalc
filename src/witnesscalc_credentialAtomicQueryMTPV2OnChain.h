@@ -1,5 +1,5 @@
-#ifndef WITNESSCALC_CREDENTIALATOMICQUERYMTPONCHAIN_H
-#define WITNESSCALC_CREDENTIALATOMICQUERYMTPONCHAIN_H
+#ifndef WITNESSCALC_CREDENTIALATOMICQUERYMTPV2ONCHAIN_H
+#define WITNESSCALC_CREDENTIALATOMICQUERYMTPV2ONCHAIN_H
 
 
 #ifdef __cplusplus
@@ -25,7 +25,7 @@ extern "C" {
  */
 
 int
-witnesscalc_credentialAtomicQueryMTPOnChain(
+witnesscalc_credentialAtomicQueryMTPV2OnChain(
     const char *circuit_buffer,  unsigned long  circuit_size,
     const char *json_buffer,     unsigned long  json_size,
     char       *wtns_buffer,     unsigned long *wtns_size,
@@ -36,4 +36,4 @@ witnesscalc_credentialAtomicQueryMTPOnChain(
 #endif
 
 
-#endif // WITNESSCALC_CREDENTIALATOMICQUERYMTPONCHAIN_H
+#endif // WITNESSCALC_CREDENTIALATOMICQUERYMTPV2ONCHAIN_H

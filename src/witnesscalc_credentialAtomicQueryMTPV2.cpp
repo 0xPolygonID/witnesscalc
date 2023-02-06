@@ -1,8 +1,8 @@
-#include "witnesscalc_credentialAtomicQueryMTPOffChain.h"
+#include "witnesscalc_credentialAtomicQueryMTPV2.h"
 #include "witnesscalc.h"
 
 int
-witnesscalc_credentialAtomicQueryMTPOffChain(
+witnesscalc_credentialAtomicQueryMTPV2(
     const char *circuit_buffer,  unsigned long  circuit_size,
     const char *json_buffer,     unsigned long  json_size,
     char       *wtns_buffer,     unsigned long *wtns_size,

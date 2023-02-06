@@ -1,5 +1,5 @@
-#ifndef WITNESSCALC_CREDENTIALATOMICQUERYSIGOFFCHAIN_H
-#define WITNESSCALC_CREDENTIALATOMICQUERYSIGOFFCHAIN_H
+#ifndef WITNESSCALC_CREDENTIALATOMICQUERYSIGV2_H
+#define WITNESSCALC_CREDENTIALATOMICQUERYSIGV2_H
 
 
 #ifdef __cplusplus
@@ -25,7 +25,7 @@ extern "C" {
  */
 
 int
-witnesscalc_credentialAtomicQuerySigOffChain(
+witnesscalc_credentialAtomicQuerySigV2(
     const char *circuit_buffer,  unsigned long  circuit_size,
     const char *json_buffer,     unsigned long  json_size,
     char       *wtns_buffer,     unsigned long *wtns_size,
@@ -36,4 +36,4 @@ witnesscalc_credentialAtomicQuerySigOffChain(
 #endif
 
 
-#endif // WITNESSCALC_CREDENTIALATOMICQUERYSIGOFFCHAIN_H
+#endif // WITNESSCALC_CREDENTIALATOMICQUERYSIGV2_H

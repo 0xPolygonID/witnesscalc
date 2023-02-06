@@ -40,18 +40,18 @@ install(TARGETS
     authV2
     witnesscalc_authV2
     witnesscalc_authV2Static
-    credentialAtomicQueryMTPOffChain
-    witnesscalc_credentialAtomicQueryMTPOffChain
-    witnesscalc_credentialAtomicQueryMTPOffChainStatic
-    credentialAtomicQuerySigOffChain
-    witnesscalc_credentialAtomicQuerySigOffChain
-    witnesscalc_credentialAtomicQuerySigOffChainStatic
-    credentialAtomicQueryMTPOnChain
-    witnesscalc_credentialAtomicQueryMTPOnChain
-    witnesscalc_credentialAtomicQueryMTPOnChainStatic
-    credentialAtomicQuerySigOnChain
-    witnesscalc_credentialAtomicQuerySigOnChain
-    witnesscalc_credentialAtomicQuerySigOnChainStatic
+    credentialAtomicQueryMTPV2
+    witnesscalc_credentialAtomicQueryMTPV2
+    witnesscalc_credentialAtomicQueryMTPV2Static
+    credentialAtomicQuerySigV2
+    witnesscalc_credentialAtomicQuerySigV2
+    witnesscalc_credentialAtomicQuerySigV2Static
+    credentialAtomicQueryMTPV2OnChain
+    witnesscalc_credentialAtomicQueryMTPV2OnChain
+    witnesscalc_credentialAtomicQueryMTPV2OnChainStatic
+    credentialAtomicQuerySigV2OnChain
+    witnesscalc_credentialAtomicQuerySigV2OnChain
+    witnesscalc_credentialAtomicQuerySigV2OnChainStatic
     fr
     RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
     BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}/app
@@ -63,18 +63,18 @@ install(FILES "${GMP_LIB_DIR}/${GMP_LIB_FILE}"
 install(FILES
     src/auth.dat
     src/authV2.dat
-    src/credentialAtomicQuerySigOffChain.dat
-    src/credentialAtomicQueryMTPOffChain.dat
-    src/credentialAtomicQuerySigOnChain.dat
-    src/credentialAtomicQueryMTPOnChain.dat
+    src/credentialAtomicQuerySigV2.dat
+    src/credentialAtomicQueryMTPV2.dat
+    src/credentialAtomicQuerySigV2OnChain.dat
+    src/credentialAtomicQueryMTPV2OnChain.dat
     DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 install(FILES
     src/witnesscalc.h
     #src/witnesscalc_auth.h
     src/witnesscalc_authV2.h
-    src/witnesscalc_credentialAtomicQuerySigOffChain.h
-    src/witnesscalc_credentialAtomicQueryMTPOffChain.h
-    src/witnesscalc_credentialAtomicQuerySigOnChain.h
-    src/witnesscalc_credentialAtomicQueryMTPOnChain.h
+    src/witnesscalc_credentialAtomicQuerySigV2.h
+    src/witnesscalc_credentialAtomicQueryMTPV2.h
+    src/witnesscalc_credentialAtomicQuerySigV2OnChain.h
+    src/witnesscalc_credentialAtomicQueryMTPV2OnChain.h
     DESTINATION ${CMAKE_INSTALL_PREFIX}/include)

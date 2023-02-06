@@ -1,8 +1,8 @@
-#include "witnesscalc_credentialAtomicQuerySigOffChain.h"
+#include "witnesscalc_credentialAtomicQuerySigV2OnChain.h"
 #include "witnesscalc.h"
 
 int
-witnesscalc_credentialAtomicQuerySigOffChain(
+witnesscalc_credentialAtomicQuerySigV2OnChain(
     const char *circuit_buffer,  unsigned long  circuit_size,
     const char *json_buffer,     unsigned long  json_size,
     char       *wtns_buffer,     unsigned long *wtns_size,
