@@ -248,7 +248,7 @@ build_ios_x86_64()
     export MIN_IOS_VERSION=8.0
 
     export ARCH_FLAGS="-arch x86_64"
-    export OPT_FLAGS="-O3 -g3 -fembed-bitcode"
+    export OPT_FLAGS="-O3 -g3"
     export HOST_FLAGS="${ARCH_FLAGS} -miphoneos-version-min=${MIN_IOS_VERSION} -isysroot $(xcrun --sdk ${SDK} --show-sdk-path)"
 
     export CC=$(xcrun --find --sdk "${SDK}" clang)

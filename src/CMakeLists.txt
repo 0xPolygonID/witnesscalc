@@ -17,19 +17,21 @@ endif()
 
 if(USE_ASM AND ARCH MATCHES "x86_64")
 
+    find_program(NASM nasm)
+
     if (CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin")
-        set(NASM_FLAGS "-fmacho64 --prefix _")
+        set(NASM_FLAGS -fmacho64 --prefix _)
     else()
         set(NASM_FLAGS -felf64)
     endif()
 
     add_custom_command(OUTPUT ${CMAKE_SOURCE_DIR}/build/fq_asm.o
-        COMMAND nasm ${NASM_FLAGS} fq.asm -o fq_asm.o
+        COMMAND ${NASM} ${NASM_FLAGS} fq.asm -o fq_asm.o
         DEPENDS ${CMAKE_SOURCE_DIR}/build/fq.asm
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/build)
 
     add_custom_command(OUTPUT ${CMAKE_SOURCE_DIR}/build/fr_asm.o
-        COMMAND nasm ${NASM_FLAGS} fr.asm -o fr_asm.o
+        COMMAND ${NASM} ${NASM_FLAGS} fr.asm -o fr_asm.o
         DEPENDS ${CMAKE_SOURCE_DIR}/build/fr.asm
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/build)
 endif()
