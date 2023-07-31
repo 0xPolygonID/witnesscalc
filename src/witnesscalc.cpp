@@ -11,6 +11,10 @@ namespace CIRCUIT_NAME {
 using json = nlohmann::json;
 
 Circom_Circuit* loadCircuit(const void *buffer, unsigned long buffer_size) {
+    if (buffer_size % sizeof(u32) != 0) {
+      throw std::runtime_error("Invalid circuit file: wrong buffer_size");
+    }
+
     Circom_Circuit *circuit = new Circom_Circuit;
 
     u8* bdata = (u8*)buffer;
@@ -38,8 +42,9 @@ Circom_Circuit* loadCircuit(const void *buffer, unsigned long buffer_size) {
       dsize = get_size_of_io_map()*sizeof(u32);
       memcpy((void *)index, (void *)(bdata+inisize), dsize);
       inisize += dsize;
-      assert(inisize % sizeof(u32) == 0);
-      assert(buffer_size % sizeof(u32) == 0);
+      if (inisize % sizeof(u32) != 0) {
+        throw std::runtime_error("Invalid circuit file: wrong inisize");
+      }
       u32 dataiomap[(buffer_size-inisize)/sizeof(u32)];
       memcpy((void *)dataiomap, (void *)(bdata+inisize), buffer_size-inisize);
       u32* pu32 = dataiomap;
@@ -121,7 +126,7 @@ void json2FrElements (json val, std::vector<FrElement> & vval){
         s = stream.str();
         base = 10;
     } else {
-        throw new std::runtime_error("Invalid JSON type");
+        throw std::runtime_error("Invalid JSON type");
     }
     Fr_str2element (&v, s.c_str(), base);
     vval.push_back(v);
