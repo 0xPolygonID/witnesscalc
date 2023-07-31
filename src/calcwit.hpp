@@ -16,6 +16,9 @@ namespace CIRCUIT_NAME {
 
 u64 fnv1a(std::string s);
 
+void check(bool condition);
+void checkWithMsg(bool condition, const char* failMsg);
+
 class Circom_CalcWit {
 
   bool *inputSignalAssigned;

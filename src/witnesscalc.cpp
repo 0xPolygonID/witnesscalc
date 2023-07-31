@@ -11,6 +11,10 @@ namespace CIRCUIT_NAME {
 using json = nlohmann::json;
 
 Circom_Circuit* loadCircuit(const void *buffer, unsigned long buffer_size) {
+    if (buffer_size % sizeof(u32) != 0) {
+      throw std::runtime_error("Invalid circuit file: wrong buffer_size");
+    }
+
     Circom_Circuit *circuit = new Circom_Circuit;
 
     u8* bdata = (u8*)buffer;
@@ -38,31 +42,32 @@ Circom_Circuit* loadCircuit(const void *buffer, unsigned long buffer_size) {
       dsize = get_size_of_io_map()*sizeof(u32);
       memcpy((void *)index, (void *)(bdata+inisize), dsize);
       inisize += dsize;
-      assert(inisize % sizeof(u32) == 0);
-      assert(buffer_size % sizeof(u32) == 0);
+      if (inisize % sizeof(u32) != 0) {
+        throw std::runtime_error("Invalid circuit file: wrong inisize");
+      }
       u32 dataiomap[(buffer_size-inisize)/sizeof(u32)];
       memcpy((void *)dataiomap, (void *)(bdata+inisize), buffer_size-inisize);
       u32* pu32 = dataiomap;
 
       for (int i = 0; i < get_size_of_io_map(); i++) {
-    u32 n = *pu32;
-    IODefPair p;
-    p.len = n;
-    IODef defs[n];
-    pu32 += 1;
-    for (u32 j = 0; j <n; j++){
-      defs[j].offset=*pu32;
-      u32 len = *(pu32+1);
-      defs[j].len = len;
-      defs[j].lengths = new u32[len];
-      memcpy((void *)defs[j].lengths,(void *)(pu32+2),len*sizeof(u32));
-      pu32 += len + 2;
-    }
-    p.defs = (IODef*)calloc(10, sizeof(IODef));
-    for (u32 j = 0; j < p.len; j++){
-      p.defs[j] = defs[j];
-    }
-    templateInsId2IOSignalInfo1[index[i]] = p;
+        u32 n = *pu32;
+        IODefPair p;
+        p.len = n;
+        IODef defs[n];
+        pu32 += 1;
+        for (u32 j = 0; j <n; j++){
+          defs[j].offset=*pu32;
+          u32 len = *(pu32+1);
+          defs[j].len = len;
+          defs[j].lengths = new u32[len];
+          memcpy((void *)defs[j].lengths,(void *)(pu32+2),len*sizeof(u32));
+          pu32 += len + 2;
+        }
+        p.defs = (IODef*)calloc(10, sizeof(IODef));
+        for (u32 j = 0; j < p.len; j++){
+          p.defs[j] = defs[j];
+        }
+        templateInsId2IOSignalInfo1[index[i]] = p;
       }
     }
     circuit->templateInsId2IOSignalInfo = move(templateInsId2IOSignalInfo1);
@@ -70,19 +75,58 @@ Circom_Circuit* loadCircuit(const void *buffer, unsigned long buffer_size) {
     return circuit;
 }
 
+bool check_valid_number(std::string & s, uint base){
+  bool is_valid = true;
+  if (base == 16){
+    for (uint i = 0; i < s.size(); i++){
+      is_valid &= (
+        ('0' <= s[i] && s[i] <= '9') ||
+        ('a' <= s[i] && s[i] <= 'f') ||
+        ('A' <= s[i] && s[i] <= 'F')
+      );
+    }
+  } else{
+    for (uint i = 0; i < s.size(); i++){
+      is_valid &= ('0' <= s[i] && s[i] < char(int('0') + base));
+    }
+  }
+  return is_valid;
+}
+
 void json2FrElements (json val, std::vector<FrElement> & vval){
   if (!val.is_array()) {
     FrElement v;
-    std::string s;
+    std::string s_aux, s;
+    uint base;
     if (val.is_string()) {
-        s = val.get<std::string>();
+      s_aux = val.get<std::string>();
+      std::string possible_prefix = s_aux.substr(0, 2);
+      if (possible_prefix == "0b" || possible_prefix == "0B"){
+        s = s_aux.substr(2, s_aux.size() - 2);
+        base = 2;
+      } else if (possible_prefix == "0o" || possible_prefix == "0O"){
+        s = s_aux.substr(2, s_aux.size() - 2);
+        base = 8;
+      } else if (possible_prefix == "0x" || possible_prefix == "0X"){
+        s = s_aux.substr(2, s_aux.size() - 2);
+        base = 16;
+      } else{
+        s = s_aux;
+        base = 10;
+      }
+      if (!check_valid_number(s, base)){
+        std::ostringstream errStrStream;
+        errStrStream << "Invalid number in JSON input: " << s_aux << "\n";
+          throw std::runtime_error(errStrStream.str() );
+      }
     } else if (val.is_number()) {
         double vd = val.get<double>();
         std::stringstream stream;
         stream << std::fixed << std::setprecision(0) << vd;
         s = stream.str();
+        base = 10;
     } else {
-        throw new std::runtime_error("Invalid JSON type");
+        throw std::runtime_error("Invalid JSON type");
     }
     Fr_str2element (&v, s.c_str());
     vval.push_back(v);
@@ -106,12 +150,12 @@ void loadJson(Circom_CalcWit *ctx, const char *json_buffer, unsigned long buffer
     json2FrElements(it.value(),v);
     for (uint i = 0; i<v.size(); i++){
       try {
-    // std::cout << it.key() << "," << i << " => " << Fr_element2str(&(v[i])) << '\n';
-    ctx->setInputSignal(h,i,v[i]);
+        // std::cout << it.key() << "," << i << " => " << Fr_element2str(&(v[i])) << '\n';
+        ctx->setInputSignal(h,i,v[i]);
       } catch (std::runtime_error e) {
-    std::ostringstream errStrStream;
-    errStrStream << "Error loading variable: " << it.key() << "\n" << e.what();
-    throw std::runtime_error(errStrStream.str() );
+        std::ostringstream errStrStream;
+        errStrStream << "Error loading variable: " << it.key() << "\n" << e.what();
+        throw std::runtime_error(errStrStream.str() );
       }
     }
   }
