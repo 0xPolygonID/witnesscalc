@@ -40,12 +40,6 @@ install(TARGETS
     authV2
     witnesscalc_authV2
     witnesscalc_authV2Static
-    #credentialAtomicQuerySig
-    #witnesscalc_credentialAtomicQuerySig
-    #witnesscalc_credentialAtomicQuerySigStatic
-    #credentialAtomicQueryMTP
-    #witnesscalc_credentialAtomicQueryMTP
-    #witnesscalc_credentialAtomicQueryMTPStatic
     credentialAtomicQueryMTPV2
     witnesscalc_credentialAtomicQueryMTPV2
     witnesscalc_credentialAtomicQueryMTPV2Static
@@ -69,8 +63,6 @@ install(FILES "${GMP_LIB_DIR}/${GMP_LIB_FILE}"
 install(FILES
     src/auth.dat
     src/authV2.dat
-    src/credentialAtomicQuerySig.dat
-    src/credentialAtomicQueryMTP.dat
     src/credentialAtomicQuerySigV2.dat
     src/credentialAtomicQueryMTPV2.dat
     src/credentialAtomicQuerySigV2OnChain.dat
@@ -81,8 +73,6 @@ install(FILES
     src/witnesscalc.h
     #src/witnesscalc_auth.h
     src/witnesscalc_authV2.h
-    #src/witnesscalc_credentialAtomicQuerySig.h
-    #src/witnesscalc_credentialAtomicQueryMTP.h
     src/witnesscalc_credentialAtomicQuerySigV2.h
     src/witnesscalc_credentialAtomicQueryMTPV2.h
     src/witnesscalc_credentialAtomicQuerySigV2OnChain.h
