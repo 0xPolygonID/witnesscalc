@@ -33,7 +33,6 @@ jobs:
           if [[ ! -d "depends/gmp/package_iphone_simulator" ]]; then ./build_gmp.sh ios_simulator; fi
 
       - name: build
-        if: false
         run: |
           mkdir build_witnesscalc && cd build_witnesscalc
           cmake .. -DTARGET_PLATFORM=arm64_host -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../package
@@ -86,7 +85,6 @@ jobs:
           make -j4 && make install
 
       - name: upload macOS arm64 artifacts
-        if: false
         uses: actions/upload-artifact@v3
         with:
           name: witnesscalc-macOS-arm64
@@ -95,7 +93,6 @@ jobs:
           if-no-files-found: error
 
       - name: upload iOS artifacts
-        if: false
         uses: actions/upload-artifact@v3
         with:
           name: witnesscalc-iOS
@@ -104,7 +101,6 @@ jobs:
           if-no-files-found: error
 
       - name: upload iOS Simulator artifacts
-        if: false
         uses: actions/upload-artifact@v3
         with:
           name: witnesscalc-iOS-Simulator
