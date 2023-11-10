@@ -22,6 +22,10 @@ jobs:
             depends/gmp-6.2.1.tar.xz
           key: ${{ runner.os }}-witnesscalc-gmp-apple-arm64-${{ hashFiles('build_gmp.sh') }}
 
+      - name: install dependencies
+        run: |
+          brew install nasm
+
       - name: build gmp
         run: |
           if [[ ! -d "depends/gmp/package" ]]; then ./build_gmp.sh host; fi
@@ -82,6 +86,7 @@ jobs:
           make -j4 && make install
 
       - name: upload macOS arm64 artifacts
+        if: false
         uses: actions/upload-artifact@v3
         with:
           name: witnesscalc-macOS-arm64
@@ -90,6 +95,7 @@ jobs:
           if-no-files-found: error
 
       - name: upload iOS artifacts
+        if: false
         uses: actions/upload-artifact@v3
         with:
           name: witnesscalc-iOS
@@ -98,6 +104,7 @@ jobs:
           if-no-files-found: error
 
       - name: upload iOS Simulator artifacts
+        if: false
         uses: actions/upload-artifact@v3
         with:
           name: witnesscalc-iOS-Simulator
