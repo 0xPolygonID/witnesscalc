@@ -5,8 +5,7 @@ You should have installed gcc and cmake
 In ubuntu:
 
 ```sh
-sudo apt install build-essential
-sudo apt install cmake
+sudo apt install build-essential cmake m4
 ```
 
 ## Compilation

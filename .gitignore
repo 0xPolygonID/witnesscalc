@@ -73,3 +73,5 @@ depends/gmp*
 build/*.o
 build_*
 package*
+
+.idea/

@@ -61,7 +61,7 @@ install(FILES "${GMP_LIB_DIR}/${GMP_LIB_FILE}"
     DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 
 install(FILES
-    src/auth.dat
+    # src/auth.dat
     src/authV2.dat
     src/credentialAtomicQuerySigV2.dat
     src/credentialAtomicQueryMTPV2.dat
