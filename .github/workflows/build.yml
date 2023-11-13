@@ -80,10 +80,6 @@ jobs:
           cp -r ../package/include ../package_ios_simulator/include
           cd ../
 
-          mkdir build_prover_macos_arm64 && cd build_prover_macos_arm64
-          cmake .. -DTARGET_PLATFORM=macos_arm64 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../package_macos_arm64
-          make -j4 && make install
-
       - name: upload macOS arm64 artifacts
         uses: actions/upload-artifact@v3
         with:
