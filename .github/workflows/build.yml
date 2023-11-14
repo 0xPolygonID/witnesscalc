@@ -9,6 +9,7 @@ on:
 jobs:
   build-apple-arm64:
     runs-on: macos-13-xlarge
+    if: false
     steps:
       - uses: actions/checkout@v4
         with:
@@ -103,3 +104,33 @@ jobs:
           path: |
             package_ios_simulator
           if-no-files-found: error
+
+  build-linux:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: "recursive"
+
+      - name: install requirements
+        uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: curl xz-utils build-essential cmake m4 nasm
+          version: 1.0
+
+      - name: Cache gmp build
+        uses: actions/cache@v3
+        with:
+          path: |
+            depends/gmp
+            depends/gmp-6.2.1.tar.xz
+          key: ${{ runner.os }}-witnesscalc-gmp-${{ hashFiles('build_gmp.sh') }}
+
+      - name: build gmp android arm64
+        run: if [[ ! -d "depends/gmp/package_android_arm64" ]]; then ./build_gmp.sh android; fi
+
+      - name: build gmp android x86_64
+        run: if [[ ! -d "depends/gmp/package_android_x86_64" ]]; then ./build_gmp.sh android_x86_64; fi
+
+      - name: build gmp android x86_64
+        run: if [[ ! -d "depends/gmp/package" ]]; then ./build_gmp.sh host; fi
