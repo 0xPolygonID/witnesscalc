@@ -134,3 +134,12 @@ jobs:
 
       - name: build gmp android x86_64
         run: if [[ ! -d "depends/gmp/package" ]]; then ./build_gmp.sh host; fi
+
+      - name: build host
+        run: make host
+
+      - name: build android
+        run: make android
+
+      - name: build android_x86_64
+        run: make android_x86_64
