@@ -1,0 +1,191 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+      - cibuild
+
+jobs:
+  build-apple-arm64:
+    runs-on: macos-13-xlarge
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: "recursive"
+
+      - name: Cache gmp build
+        uses: actions/cache@v3
+        with:
+          path: |
+            depends/gmp
+            depends/gmp-6.2.1.tar.xz
+          key: ${{ runner.os }}-witnesscalc-gmp-apple-arm64-${{ hashFiles('build_gmp.sh') }}
+
+      - name: install dependencies
+        run: |
+          brew install nasm
+
+      - name: build gmp
+        run: |
+          if [[ ! -d "depends/gmp/package" ]]; then ./build_gmp.sh host; fi
+          if [[ ! -d "depends/gmp/package_ios_arm64" ]]; then ./build_gmp.sh ios; fi
+          if [[ ! -d "depends/gmp/package_iphone_simulator" ]]; then ./build_gmp.sh ios_simulator; fi
+
+      - name: build
+        run: |
+          mkdir build_witnesscalc && cd build_witnesscalc
+          cmake .. -DTARGET_PLATFORM=arm64_host -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../package
+          make -j8 -vvv
+          make install
+          cd ../
+          
+          mkdir build_witnesscalc_ios && cd build_witnesscalc_ios
+          cmake .. -GXcode -DTARGET_PLATFORM=IOS -DCMAKE_INSTALL_PREFIX=../package_ios
+          xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS' -configuration Release -scheme witnesscalc_authV2Static
+          xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS' -configuration Release -scheme witnesscalc_credentialAtomicQueryMTPV2OnChainStatic
+          xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS' -configuration Release -scheme witnesscalc_credentialAtomicQueryMTPV2Static
+          xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS' -configuration Release -scheme witnesscalc_credentialAtomicQuerySigV2OnChainStatic
+          xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS' -configuration Release -scheme witnesscalc_credentialAtomicQuerySigV2Static
+          mkdir -p ../package_ios/lib
+          cp ../depends/gmp/package_ios_arm64/lib/libgmp.a ../package_ios/lib
+          cp \
+            ./src/Release-iphoneos/libfr.a \
+            ./src/Release-iphoneos/libwitnesscalc_authV2.a \
+            ./src/Release-iphoneos/libwitnesscalc_credentialAtomicQueryMTPV2.a \
+            ./src/Release-iphoneos/libwitnesscalc_credentialAtomicQueryMTPV2OnChain.a \
+            ./src/Release-iphoneos/libwitnesscalc_credentialAtomicQuerySigV2.a \
+            ./src/Release-iphoneos/libwitnesscalc_credentialAtomicQuerySigV2OnChain.a \
+            ../package_ios/lib
+          cp -r ../package/include ../package_ios/include
+          cd ../
+
+          mkdir build_prover_ios_simulator && cd build_prover_ios_simulator
+          cmake .. -GXcode -DTARGET_PLATFORM=IOS -DCMAKE_INSTALL_PREFIX=../package_ios_simulator -DUSE_ASM=NO
+          xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS Simulator' -configuration Debug -scheme witnesscalc_authV2Static
+          xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS Simulator' -configuration Debug -scheme witnesscalc_credentialAtomicQueryMTPV2OnChainStatic
+          xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS Simulator' -configuration Debug -scheme witnesscalc_credentialAtomicQueryMTPV2Static
+          xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS Simulator' -configuration Debug -scheme witnesscalc_credentialAtomicQuerySigV2OnChainStatic
+          xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS Simulator' -configuration Debug -scheme witnesscalc_credentialAtomicQuerySigV2Static
+          mkdir -p ../package_ios_simulator/lib
+          cp ../depends/gmp/package_iphone_simulator/lib/libgmp.a src/Debug-iphonesimulator
+          cp \
+            ./src/Debug-iphonesimulator/libfr.a \
+            ./src/Debug-iphonesimulator/libwitnesscalc_authV2.a \
+            ./src/Debug-iphonesimulator/libwitnesscalc_credentialAtomicQueryMTPV2.a \
+            ./src/Debug-iphonesimulator/libwitnesscalc_credentialAtomicQueryMTPV2OnChain.a \
+            ./src/Debug-iphonesimulator/libwitnesscalc_credentialAtomicQuerySigV2.a \
+            ./src/Debug-iphonesimulator/libwitnesscalc_credentialAtomicQuerySigV2OnChain.a \
+            ../package_ios_simulator/lib
+          cp -r ../package/include ../package_ios_simulator/include
+          cd ../
+
+      - name: Cache circuits
+        uses: actions/cache@v3
+        with:
+          path: |
+            circuits
+          key: circuits-ci.zip
+
+      - name: Get circuits
+        run: |
+          set -e
+          if [[ ! -d "circuits" ]]; then
+            mkdir circuits
+            curl -o circuits/ci.zip -L https://iden3-circuits-bucket.s3.eu-west-1.amazonaws.com/ci.zip
+            unzip -o circuits/ci.zip -d circuits
+            rm circuits/ci.zip
+          fi
+
+      - name: test witness generation
+        run: |
+          npm install -g snarkjs
+          mkdir temp
+          ./run_tests.sh
+
+      - name: upload macOS arm64 artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: witnesscalc-macOS-arm64
+          path: |
+            package
+          if-no-files-found: error
+
+      - name: upload iOS artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: witnesscalc-iOS
+          path: |
+            package_ios
+          if-no-files-found: error
+
+      - name: upload iOS Simulator artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: witnesscalc-iOS-Simulator
+          path: |
+            package_ios_simulator
+          if-no-files-found: error
+
+  build-linux:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: "recursive"
+
+      - name: install requirements
+        uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: curl xz-utils build-essential cmake m4 nasm
+          version: 1.0
+
+      - name: Cache gmp build
+        uses: actions/cache@v3
+        with:
+          path: |
+            depends/gmp
+            depends/gmp-6.2.1.tar.xz
+          key: ${{ runner.os }}-witnesscalc-gmp-${{ hashFiles('build_gmp.sh') }}
+
+      - name: build gmp android arm64
+        run: if [[ ! -d "depends/gmp/package_android_arm64" ]]; then ./build_gmp.sh android; fi
+
+      - name: build gmp android x86_64
+        run: if [[ ! -d "depends/gmp/package_android_x86_64" ]]; then ./build_gmp.sh android_x86_64; fi
+
+      - name: build gmp android x86_64
+        run: if [[ ! -d "depends/gmp/package" ]]; then ./build_gmp.sh host; fi
+
+      - name: build host
+        run: make host
+
+      - name: build android
+        run: make android
+
+      - name: build android_x86_64
+        run: make android_x86_64
+
+      - name: upload Linux amd64 artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: witnesscalc-linux-amd64
+          path: |
+            package
+          if-no-files-found: error
+
+      - name: upload Android artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: witnesscalc-Android
+          path: |
+            package_android
+          if-no-files-found: error
+
+      - name: upload Android x86_64 artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: witnesscalc-Android-x86_64
+          path: |
+            package_android_x86_64
+          if-no-files-found: error
