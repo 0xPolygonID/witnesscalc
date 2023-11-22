@@ -93,7 +93,7 @@ jobs:
         with:
           path: |
             circuits
-          key: circuits-ci.zip
+          key: circuits-ci-2.zip
 
       - name: Get circuits
         run: |
