@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - cibuild
+      - v3_circuits
 
 jobs:
   build-apple-arm64:
@@ -36,7 +36,7 @@ jobs:
         run: |
           mkdir build_witnesscalc && cd build_witnesscalc
           cmake .. -DTARGET_PLATFORM=arm64_host -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../package
-          make -j8 -vvv
+          make -j8
           make install
           cd ../
           
@@ -47,6 +47,8 @@ jobs:
           xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS' -configuration Release -scheme witnesscalc_credentialAtomicQueryMTPV2Static
           xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS' -configuration Release -scheme witnesscalc_credentialAtomicQuerySigV2OnChainStatic
           xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS' -configuration Release -scheme witnesscalc_credentialAtomicQuerySigV2Static
+          xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS' -configuration Release -scheme witnesscalc_credentialAtomicQueryV3Static
+          xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS' -configuration Release -scheme witnesscalc_credentialAtomicQueryV3OnChainStatic
           mkdir -p ../package_ios/lib
           cp ../depends/gmp/package_ios_arm64/lib/libgmp.a ../package_ios/lib
           cp \
@@ -56,6 +58,8 @@ jobs:
             ./src/Release-iphoneos/libwitnesscalc_credentialAtomicQueryMTPV2OnChain.a \
             ./src/Release-iphoneos/libwitnesscalc_credentialAtomicQuerySigV2.a \
             ./src/Release-iphoneos/libwitnesscalc_credentialAtomicQuerySigV2OnChain.a \
+            ./src/Release-iphoneos/libwitnesscalc_credentialAtomicQueryV3.a \
+            ./src/Release-iphoneos/libwitnesscalc_credentialAtomicQueryV3OnChain.a \
             ../package_ios/lib
           cp -r ../package/include ../package_ios/include
           cd ../
@@ -67,6 +71,8 @@ jobs:
           xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS Simulator' -configuration Debug -scheme witnesscalc_credentialAtomicQueryMTPV2Static
           xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS Simulator' -configuration Debug -scheme witnesscalc_credentialAtomicQuerySigV2OnChainStatic
           xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS Simulator' -configuration Debug -scheme witnesscalc_credentialAtomicQuerySigV2Static
+          xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS Simulator' -configuration Debug -scheme witnesscalc_credentialAtomicQueryV3Static
+          xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS Simulator' -configuration Debug -scheme witnesscalc_credentialAtomicQueryV3OnChainStatic
           mkdir -p ../package_ios_simulator/lib
           cp ../depends/gmp/package_iphone_simulator/lib/libgmp.a src/Debug-iphonesimulator
           cp \
@@ -76,6 +82,8 @@ jobs:
             ./src/Debug-iphonesimulator/libwitnesscalc_credentialAtomicQueryMTPV2OnChain.a \
             ./src/Debug-iphonesimulator/libwitnesscalc_credentialAtomicQuerySigV2.a \
             ./src/Debug-iphonesimulator/libwitnesscalc_credentialAtomicQuerySigV2OnChain.a \
+            ./src/Debug-iphonesimulator/libwitnesscalc_credentialAtomicQueryV3.a \
+            ./src/Debug-iphonesimulator/libwitnesscalc_credentialAtomicQueryV3OnChain.a \
             ../package_ios_simulator/lib
           cp -r ../package/include ../package_ios_simulator/include
           cd ../
