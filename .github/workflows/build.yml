@@ -60,6 +60,13 @@ jobs:
             ./src/Release-iphoneos/libwitnesscalc_credentialAtomicQuerySigV2OnChain.a \
             ./src/Release-iphoneos/libwitnesscalc_credentialAtomicQueryV3.a \
             ./src/Release-iphoneos/libwitnesscalc_credentialAtomicQueryV3OnChain.a \
+            ../src/authV2.dat \
+            ../src/credentialAtomicQueryMTPV2.dat \
+            ../src/credentialAtomicQueryMTPV2OnChain.dat \
+            ../src/credentialAtomicQuerySigV2.dat \
+            ../src/credentialAtomicQuerySigV2OnChain.dat \
+            ../src/credentialAtomicQueryV3.dat \
+            ../src/credentialAtomicQueryV3OnChain.dat \
             ../package_ios/lib
           cp -r ../package/include ../package_ios/include
           cd ../
@@ -84,6 +91,13 @@ jobs:
             ./src/Debug-iphonesimulator/libwitnesscalc_credentialAtomicQuerySigV2OnChain.a \
             ./src/Debug-iphonesimulator/libwitnesscalc_credentialAtomicQueryV3.a \
             ./src/Debug-iphonesimulator/libwitnesscalc_credentialAtomicQueryV3OnChain.a \
+            ../src/authV2.dat \
+            ../src/credentialAtomicQueryMTPV2.dat \
+            ../src/credentialAtomicQueryMTPV2OnChain.dat \
+            ../src/credentialAtomicQuerySigV2.dat \
+            ../src/credentialAtomicQuerySigV2OnChain.dat \
+            ../src/credentialAtomicQueryV3.dat \
+            ../src/credentialAtomicQueryV3OnChain.dat \
             ../package_ios_simulator/lib
           cp -r ../package/include ../package_ios_simulator/include
           cd ../
