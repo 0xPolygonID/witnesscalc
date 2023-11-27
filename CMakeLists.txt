@@ -52,6 +52,12 @@ install(TARGETS
     credentialAtomicQuerySigV2OnChain
     witnesscalc_credentialAtomicQuerySigV2OnChain
     witnesscalc_credentialAtomicQuerySigV2OnChainStatic
+    credentialAtomicQueryV3
+    witnesscalc_credentialAtomicQueryV3
+    witnesscalc_credentialAtomicQueryV3Static
+    credentialAtomicQueryV3OnChain
+    witnesscalc_credentialAtomicQueryV3OnChain
+    witnesscalc_credentialAtomicQueryV3OnChainStatic
     fr
     RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
     BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}/app
@@ -67,6 +73,8 @@ install(FILES
     src/credentialAtomicQueryMTPV2.dat
     src/credentialAtomicQuerySigV2OnChain.dat
     src/credentialAtomicQueryMTPV2OnChain.dat
+    src/credentialAtomicQueryV3.dat
+    src/credentialAtomicQueryV3OnChain.dat
     DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 install(FILES
@@ -77,4 +85,6 @@ install(FILES
     src/witnesscalc_credentialAtomicQueryMTPV2.h
     src/witnesscalc_credentialAtomicQuerySigV2OnChain.h
     src/witnesscalc_credentialAtomicQueryMTPV2OnChain.h
+    src/witnesscalc_credentialAtomicQueryV3.h
+    src/witnesscalc_credentialAtomicQueryV3OnChain.h
     DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
