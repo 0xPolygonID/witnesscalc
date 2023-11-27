@@ -6,7 +6,6 @@
 #include <mutex>
 #include <condition_variable>
 #include <thread>
-#include <iostream>
 
 #include "fr.hpp"
 
@@ -56,6 +55,11 @@ struct Circom_Component {
   std::mutex *mutexes;  //one for each output
   std::condition_variable *cvs;
   std::thread *sbct; //subcomponent threads
+
+  Circom_Component()
+	: subcomponents(0), subcomponentsParallel(0), outputIsSet(0), mutexes(0), cvs(0), sbct(0)
+  {}
+
 };
 
 /*

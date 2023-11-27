@@ -128,7 +128,7 @@ void json2FrElements (json val, std::vector<FrElement> & vval){
     } else {
         throw std::runtime_error("Invalid JSON type");
     }
-    Fr_str2element (&v, s.c_str());
+    Fr_str2element (&v, s.c_str(), base);
     vval.push_back(v);
   } else {
     for (uint i = 0; i < val.size(); i++) {
@@ -143,18 +143,32 @@ void loadJson(Circom_CalcWit *ctx, const char *json_buffer, unsigned long buffer
 
   u64 nItems = j.size();
   // printf("Items : %llu\n",nItems);
+  if (nItems == 0){
+    ctx->tryRunCircuit();
+  }
   for (json::iterator it = j.begin(); it != j.end(); ++it) {
     // std::cout << it.key() << " => " << it.value() << '\n';
     u64 h = fnv1a(it.key());
     std::vector<FrElement> v;
     json2FrElements(it.value(),v);
+    uint signalSize = ctx->getInputSignalSize(h);
+    if (v.size() < signalSize) {
+	std::ostringstream errStrStream;
+	errStrStream << "Error loading signal " << it.key() << ": Not enough values\n";
+	throw std::runtime_error(errStrStream.str() );
+    }
+    if (v.size() > signalSize) {
+	std::ostringstream errStrStream;
+	errStrStream << "Error loading signal " << it.key() << ": Too many values\n";
+	throw std::runtime_error(errStrStream.str() );
+    }
     for (uint i = 0; i<v.size(); i++){
       try {
         // std::cout << it.key() << "," << i << " => " << Fr_element2str(&(v[i])) << '\n';
         ctx->setInputSignal(h,i,v[i]);
       } catch (std::runtime_error e) {
         std::ostringstream errStrStream;
-        errStrStream << "Error loading variable: " << it.key() << "\n" << e.what();
+        errStrStream << "Error setting signal: " << it.key() << "\n" << e.what();
         throw std::runtime_error(errStrStream.str() );
       }
     }
