@@ -107,7 +107,7 @@ jobs:
         with:
           path: |
             circuits
-          key: circuits-ci-2.zip
+          key: circuits-ci-3.zip
 
       - name: Get circuits
         run: |
