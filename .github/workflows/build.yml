@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - v3_circuits
+  pull_request:
 
 jobs:
   build-apple-arm64:
