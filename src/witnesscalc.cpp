@@ -21,17 +21,29 @@ Circom_Circuit* loadCircuit(const void *buffer, unsigned long buffer_size) {
 
     circuit->InputHashMap = new HashSignalInfo[get_size_of_input_hashmap()];
     uint dsize = get_size_of_input_hashmap()*sizeof(HashSignalInfo);
+    if (buffer_size < dsize) {
+        //Add this code snippet to prevent potential memory errors.
+        throw std::runtime_error("Invalid circuit file: buffer_size <= dsize");
+    }
     memcpy((void *)(circuit->InputHashMap), (void *)bdata, dsize);
 
     circuit->witness2SignalList = new u64[get_size_of_witness()];
     uint inisize = dsize;
     dsize = get_size_of_witness()*sizeof(u64);
+    if (buffer_size < dsize + inisize) {
+        //Add this code snippet to prevent potential memory errors.
+        throw std::runtime_error("Invalid circuit file: buffer_size <= dsize + inisize");
+    }
     memcpy((void *)(circuit->witness2SignalList), (void *)(bdata+inisize), dsize);
 
     circuit->circuitConstants = new FrElement[get_size_of_constants()];
     if (get_size_of_constants()>0) {
       inisize += dsize;
       dsize = get_size_of_constants()*sizeof(FrElement);
+      if (buffer_size < dsize + inisize) {
+        //Add this code snippet to prevent potential memory errors.
+        throw std::runtime_error("Invalid circuit file: buffer_size <= dsize + inisize");
+      }
       memcpy((void *)(circuit->circuitConstants), (void *)(bdata+inisize), dsize);
     }
 
@@ -40,10 +52,18 @@ Circom_Circuit* loadCircuit(const void *buffer, unsigned long buffer_size) {
       u32 index[get_size_of_io_map()];
       inisize += dsize;
       dsize = get_size_of_io_map()*sizeof(u32);
+      if (buffer_size < dsize + inisize) {
+        //Add this code snippet to prevent potential memory errors.
+        throw std::runtime_error("Invalid circuit file: buffer_size <= dsize + inisize");
+      }
       memcpy((void *)index, (void *)(bdata+inisize), dsize);
       inisize += dsize;
       if (inisize % sizeof(u32) != 0) {
         throw std::runtime_error("Invalid circuit file: wrong inisize");
+      }
+      if (buffer_size <= inisize) {
+          //Add this code snippet to prevent potential memory errors.
+          throw std::runtime_error("Invalid circuit file: buffer_size <= inisize");
       }
       u32 dataiomap[(buffer_size-inisize)/sizeof(u32)];
       memcpy((void *)dataiomap, (void *)(bdata+inisize), buffer_size-inisize);
