@@ -1,4 +1,5 @@
 #include <iomanip>
+#include <iostream>
 #include <sstream>
 #include "calcwit.hpp"
 
@@ -9,7 +10,7 @@ extern void run(Circom_CalcWit* ctx);
 
 void check(bool condition) {
   if (!condition) {
-    fprintf(stderr, "assert failed\n");
+    std::cerr << "assert failed" << std::endl;
     throw std::runtime_error("assert failed");
   }
 }
@@ -19,7 +20,7 @@ void checkWithMsg(bool condition, const char* failMsg) {
     std::stringstream stream;
     stream << "assert failed: "
            << failMsg;
-    fprintf(stderr, "%s\n", stream.str());
+    std::cerr << stream.str() << std::endl;
     throw std::runtime_error(stream.str());
   }
 }
@@ -129,8 +130,6 @@ std::string Circom_CalcWit::getTrace(u64 id_cmp){
 
     return Circom_CalcWit::getTrace(id_father) + "." + my_name;
   }
-
-
 }
 
 std::string Circom_CalcWit::generate_position_array(uint* dimensions, uint size_dimensions, uint index){
