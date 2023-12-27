@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <gmp.h>
 #include <string>
-#include <cstring>
 #include <stdexcept>
 
 
