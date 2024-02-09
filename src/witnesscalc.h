@@ -28,6 +28,13 @@ witnesscalc(
     char       *wtns_buffer,     unsigned long *wtns_size,
     char       *error_msg,       unsigned long  error_msg_maxsize);
 
+int
+witnesscalc_dat(
+    const char *dat_fname,
+    const char *json_buffer,     unsigned long  json_size,
+    char       *wtns_buffer,     unsigned long *wtns_size,
+    char       *error_msg,       unsigned long  error_msg_maxsize);
+
 } // namespace
 
 #endif // WITNESSCALC_H

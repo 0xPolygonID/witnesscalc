@@ -1,46 +1,10 @@
 #include <iostream>
-#include <sys/stat.h>
-#include <sys/mman.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include <chrono>
 #include "witnesscalc.h"
-
+#include "internal.hpp"
 
 #define handle_error(msg) \
            do { perror(msg); exit(EXIT_FAILURE); } while (0)
-
-class FileMapLoader
-{
-public:
-    FileMapLoader(std::string const &datFileName)
-    {
-        int fd;
-        struct stat sb;
-
-        fd = open(datFileName.c_str(), O_RDONLY);
-        if (fd == -1) {
-            std::cout << ".dat file not found: " << datFileName << "\n";
-            throw std::system_error(errno, std::generic_category(), "open");
-        }
-
-        if (fstat(fd, &sb) == -1) {          /* To obtain file size */
-            throw std::system_error(errno, std::generic_category(), "fstat");
-        }
-
-        size =  sb.st_size;
-        buffer = (char*)mmap(NULL, size, PROT_READ , MAP_PRIVATE, fd, 0);
-        close(fd);
-    }
-
-    ~FileMapLoader()
-    {
-        munmap(buffer, size);
-    }
-
-    char   *buffer;
-    size_t  size;
-};
 
 void writeBinWitness(char *witnessBuffer, unsigned long witnessSize, std::string wtnsFileName)
 {
@@ -77,10 +41,9 @@ int main (int argc, char *argv[]) {
         size_t witnessSize = sizeof(WitnessBuffer);
         char   errorMessage[256];
 
-        FileMapLoader datLoader(datfile);
         FileMapLoader jsonLoader(jsonfile);
 
-        int error = CIRCUIT_NAME::witnesscalc(datLoader.buffer, datLoader.size,
+        int error = CIRCUIT_NAME::witnesscalc_dat(datfile.c_str(),
                                 jsonLoader.buffer, jsonLoader.size,
                                 WitnessBuffer, &witnessSize,
                                 errorMessage, sizeof(errorMessage));
