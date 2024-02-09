@@ -321,7 +321,7 @@ int witnesscalc(
     return WITNESSCALC_OK;
 }
 
-int witnesscalc_dat(
+int witnesscalc_from_dat_file(
         const char *dat_fname,
         const char *json_buffer,     unsigned long  json_size,
         char       *wtns_buffer,     unsigned long *wtns_size,

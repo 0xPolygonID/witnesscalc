@@ -43,7 +43,7 @@ int main (int argc, char *argv[]) {
 
         FileMapLoader jsonLoader(jsonfile);
 
-        int error = CIRCUIT_NAME::witnesscalc_dat(datfile.c_str(),
+        int error = CIRCUIT_NAME::witnesscalc_from_dat_file(datfile.c_str(),
                                 jsonLoader.buffer, jsonLoader.size,
                                 WitnessBuffer, &witnessSize,
                                 errorMessage, sizeof(errorMessage));
