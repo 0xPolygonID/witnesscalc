@@ -72,12 +72,12 @@ package/bin/credentialAtomicQueryV3 \
   testdata/credentialAtomicQueryV3_Sig_input.json \
   temp/credentialAtomicQueryV3_Sig_witness.wtns
 snarkjs groth16 prove \
-  circuits/credentialAtomicQueryV3/circuit_final.zkey \
+  circuits/credentialAtomicQueryV3-beta.0/circuit_final.zkey \
   temp/credentialAtomicQueryV3_Sig_witness.wtns \
   temp/credentialAtomicQueryV3_Sig_proof.json \
   temp/credentialAtomicQueryV3_Sig_public.json
 snarkjs groth16 verify \
-  circuits/credentialAtomicQueryV3/verification_key.json \
+  circuits/credentialAtomicQueryV3-beta.0/verification_key.json \
   temp/credentialAtomicQueryV3_Sig_public.json \
   temp/credentialAtomicQueryV3_Sig_proof.json
 
@@ -85,12 +85,12 @@ package/bin/credentialAtomicQueryV3 \
   testdata/credentialAtomicQueryV3_MTP_input.json \
   temp/credentialAtomicQueryV3_MTP_witness.wtns
 snarkjs groth16 prove \
-  circuits/credentialAtomicQueryV3/circuit_final.zkey \
+  circuits/credentialAtomicQueryV3-beta.0/circuit_final.zkey \
   temp/credentialAtomicQueryV3_MTP_witness.wtns \
   temp/credentialAtomicQueryV3_MTP_proof.json \
   temp/credentialAtomicQueryV3_MTP_public.json
 snarkjs groth16 verify \
-  circuits/credentialAtomicQueryV3/verification_key.json \
+  circuits/credentialAtomicQueryV3-beta.0/verification_key.json \
   temp/credentialAtomicQueryV3_MTP_public.json \
   temp/credentialAtomicQueryV3_MTP_proof.json
 
@@ -98,12 +98,12 @@ package/bin/credentialAtomicQueryV3OnChain \
   testdata/credentialAtomicQueryV3OnChain_Sig_input.json \
   temp/credentialAtomicQueryV3OnChain_Sig_witness.wtns
 snarkjs groth16 prove \
-  circuits/credentialAtomicQueryV3OnChain/circuit_final.zkey \
+  circuits/credentialAtomicQueryV3OnChain-beta.0/circuit_final.zkey \
   temp/credentialAtomicQueryV3OnChain_Sig_witness.wtns \
   temp/credentialAtomicQueryV3OnChain_Sig_proof.json \
   temp/credentialAtomicQueryV3OnChain_Sig_public.json
 snarkjs groth16 verify \
-  circuits/credentialAtomicQueryV3OnChain/verification_key.json \
+  circuits/credentialAtomicQueryV3OnChain-beta.0/verification_key.json \
   temp/credentialAtomicQueryV3OnChain_Sig_public.json \
   temp/credentialAtomicQueryV3OnChain_Sig_proof.json
 
@@ -111,11 +111,11 @@ package/bin/credentialAtomicQueryV3OnChain \
   testdata/credentialAtomicQueryV3OnChain_MTP_input.json \
   temp/credentialAtomicQueryV3OnChain_MTP_witness.wtns
 snarkjs groth16 prove \
-  circuits/credentialAtomicQueryV3OnChain/circuit_final.zkey \
+  circuits/credentialAtomicQueryV3OnChain-beta.0/circuit_final.zkey \
   temp/credentialAtomicQueryV3OnChain_MTP_witness.wtns \
   temp/credentialAtomicQueryV3OnChain_MTP_proof.json \
   temp/credentialAtomicQueryV3OnChain_MTP_public.json
 snarkjs groth16 verify \
-  circuits/credentialAtomicQueryV3OnChain/verification_key.json \
+  circuits/credentialAtomicQueryV3OnChain-beta.0/verification_key.json \
   temp/credentialAtomicQueryV3OnChain_MTP_public.json \
   temp/credentialAtomicQueryV3OnChain_MTP_proof.json
