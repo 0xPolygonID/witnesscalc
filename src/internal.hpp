@@ -37,6 +37,9 @@ public:
         munmap(buffer, size);
     }
 
+    FileMapLoader(const FileMapLoader&) = delete; // Delete the copy constructor
+    FileMapLoader& operator=(const FileMapLoader&) = delete; // Delete the copy assignment operator
+
     char   *buffer;
     size_t  size;
 };
