@@ -1,7 +1,7 @@
 #include <iostream>
 #include <chrono>
 #include "witnesscalc.h"
-#include "internal.hpp"
+#include "filemaploader.hpp"
 
 #define handle_error(msg) \
            do { perror(msg); exit(EXIT_FAILURE); } while (0)

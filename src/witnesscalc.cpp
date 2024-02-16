@@ -1,5 +1,5 @@
 #include "witnesscalc.h"
-#include "internal.hpp"
+#include "filemaploader.hpp"
 #include "calcwit.hpp"
 #include "circom.hpp"
 #include <nlohmann/json.hpp>
