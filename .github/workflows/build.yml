@@ -114,7 +114,7 @@ jobs:
           set -e
           if [[ ! -d "circuits" ]]; then
             mkdir circuits
-            curl -o circuits/ci.zip -L https://iden3-circuits-bucket.s3.eu-west-1.amazonaws.com/ci.zip
+            curl -o circuits/ci.zip -L https://iden3-circuits-bucket.s3.eu-west-1.amazonaws.com/latest.zip
             unzip -o circuits/ci.zip -d circuits
             rm circuits/ci.zip
           fi
