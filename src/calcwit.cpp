@@ -107,8 +107,9 @@ void Circom_CalcWit::setInputSignal(u64 h, uint i,  FrElement & val){
   uint si = circuit->InputHashMap[pos].signalid+i;
   if (inputSignalAssigned[si-get_main_input_signal_start()]) {
     fprintf(stderr, "Signal assigned twice: %d\n", si);
-    char err[256];
-    sprintf(err, "Signal assigned twice: %d", si);
+    const size_t errLn = 256;
+    char err[errLn];
+    snprintf(err, errLn, "Signal assigned twice: %d", si);
     throw std::runtime_error(err);
   }
   signalValues[si] = val;

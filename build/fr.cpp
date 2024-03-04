@@ -65,8 +65,9 @@ char *Fr_element2str(PFrElement pE) {
     mpz_t r;
     if (!(pE->type & Fr_LONG)) {
         if (pE->shortVal>=0) {
-            char *r = new char[32];
-            sprintf(r, "%d", pE->shortVal);
+            const size_t rLn = 32;
+            char *r = new char[rLn];
+            snprintf(r, rLn, "%d", pE->shortVal);
             return r;
         } else {
             mpz_init_set_si(r, pE->shortVal);
