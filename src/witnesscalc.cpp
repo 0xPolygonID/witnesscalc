@@ -85,7 +85,7 @@ Circom_Circuit* loadCircuit(const void *buffer, unsigned long buffer_size) {
         templateInsId2IOSignalInfo1[index[i]] = p;
       }
     }
-    circuit->templateInsId2IOSignalInfo = move(templateInsId2IOSignalInfo1);
+    circuit->templateInsId2IOSignalInfo = std::move(templateInsId2IOSignalInfo1);
 
     return circuit;
 }

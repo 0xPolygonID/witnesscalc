@@ -15,7 +15,7 @@ jobs:
           submodules: "recursive"
 
       - name: Cache gmp build
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             depends/gmp
@@ -103,7 +103,7 @@ jobs:
           cd ../
 
       - name: Cache circuits
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             circuits
@@ -126,7 +126,7 @@ jobs:
           ./run_tests.sh
 
       - name: upload macOS arm64 artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: witnesscalc-macOS-arm64
           path: |
@@ -134,7 +134,7 @@ jobs:
           if-no-files-found: error
 
       - name: upload iOS artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: witnesscalc-iOS
           path: |
@@ -142,7 +142,7 @@ jobs:
           if-no-files-found: error
 
       - name: upload iOS Simulator artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: witnesscalc-iOS-Simulator
           path: |
@@ -163,7 +163,7 @@ jobs:
           version: 1.0
 
       - name: Cache gmp build
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             depends/gmp
@@ -189,7 +189,7 @@ jobs:
         run: make android_x86_64
 
       - name: upload Linux amd64 artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: witnesscalc-linux-amd64
           path: |
@@ -197,7 +197,7 @@ jobs:
           if-no-files-found: error
 
       - name: upload Android artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: witnesscalc-Android
           path: |
@@ -205,7 +205,7 @@ jobs:
           if-no-files-found: error
 
       - name: upload Android x86_64 artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: witnesscalc-Android-x86_64
           path: |
