@@ -1,7 +1,7 @@
 #include "witnesscalc.h"
+#include "filemaploader.hpp"
 #include "calcwit.hpp"
 #include "circom.hpp"
-#include "fr.hpp"
 #include <nlohmann/json.hpp>
 #include <sstream>
 #include <memory>
@@ -283,10 +283,10 @@ int witnesscalc(
 
         loadJson(ctx.get(), json_buffer, json_size);
 
-        if (ctx.get()->getRemaingInputsToBeSet() != 0) {
+        if (ctx->getRemaingInputsToBeSet() != 0) {
             std::stringstream stream;
             stream << "Not all inputs have been set. Only "
-                   << get_main_input_signal_no()-ctx.get()->getRemaingInputsToBeSet()
+                   << get_main_input_signal_no()-ctx->getRemaingInputsToBeSet()
                    << " out of " << get_main_input_signal_no();
 
             strncpy(error_msg, stream.str().c_str(), error_msg_maxsize);
@@ -320,5 +320,20 @@ int witnesscalc(
 
     return WITNESSCALC_OK;
 }
+
+int witnesscalc_from_dat_file(
+        const char *dat_fname,
+        const char *json_buffer,     unsigned long  json_size,
+        char       *wtns_buffer,     unsigned long *wtns_size,
+        char       *error_msg,       unsigned long  error_msg_maxsize)
+{
+
+    std::string s(dat_fname);
+    FileMapLoader dat(dat_fname);
+    return witnesscalc(dat.buffer, dat.size, json_buffer,
+                       json_size, wtns_buffer, wtns_size,
+                       error_msg, error_msg_maxsize);
+}
+
 
 } // namespace

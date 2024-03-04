@@ -28,6 +28,17 @@ witnesscalc(
     char       *wtns_buffer,     unsigned long *wtns_size,
     char       *error_msg,       unsigned long  error_msg_maxsize);
 
+/**
+ * A wrapper function for `witnesscalc` that takes the circuit as a .dat file
+ * name instead of a buffer.
+ */
+int
+witnesscalc_from_dat_file(
+    const char *dat_fname,
+    const char *json_buffer,     unsigned long  json_size,
+    char       *wtns_buffer,     unsigned long *wtns_size,
+    char       *error_msg,       unsigned long  error_msg_maxsize);
+
 } // namespace
 
 #endif // WITNESSCALC_H
