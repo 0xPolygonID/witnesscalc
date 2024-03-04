@@ -1,11 +1,29 @@
 #include <iomanip>
+#include <iostream>
 #include <sstream>
-#include <assert.h>
 #include "calcwit.hpp"
 
 namespace CIRCUIT_NAME {
 
 extern void run(Circom_CalcWit* ctx);
+
+
+void check(bool condition) {
+  if (!condition) {
+    std::cerr << "assert failed" << std::endl;
+    throw std::runtime_error("assert failed");
+  }
+}
+
+void checkWithMsg(bool condition, const char* failMsg) {
+  if (!condition) {
+    std::stringstream stream;
+    stream << "assert failed: "
+           << failMsg;
+    std::cerr << stream.str() << std::endl;
+    throw std::runtime_error(stream.str());
+  }
+}
 
 std::string int_to_hex( u64 i )
 {
@@ -58,13 +76,13 @@ uint Circom_CalcWit::getInputSignalHashPosition(u64 h) {
     while (pos != inipos) {
       if (circuit->InputHashMap[pos].hash==h) return pos;
       if (circuit->InputHashMap[pos].hash==0) {
-	fprintf(stderr, "Signal not found\n");
-	assert(false);
+        fprintf(stderr, "Signal not found\n");
+        throw std::runtime_error("Signal not found");
       }
       pos = (pos+1)%n; 
     }
     fprintf(stderr, "Signals not found\n");
-    assert(false);
+    throw std::runtime_error("Signals not found");
   }
   return pos;
 }
@@ -78,18 +96,21 @@ void Circom_CalcWit::tryRunCircuit(){
 void Circom_CalcWit::setInputSignal(u64 h, uint i,  FrElement & val){
   if (inputSignalAssignedCounter == 0) {
     fprintf(stderr, "No more signals to be assigned\n");
-    assert(false);
+    throw std::runtime_error("No more signals to be assigned");
   }
   uint pos = getInputSignalHashPosition(h);
   if (i >= circuit->InputHashMap[pos].signalsize) {
     fprintf(stderr, "Input signal array access exceeds the size\n");
-    assert(false);
+    throw std::runtime_error("Input signal array access exceeds the size");
   }
   
   uint si = circuit->InputHashMap[pos].signalid+i;
   if (inputSignalAssigned[si-get_main_input_signal_start()]) {
     fprintf(stderr, "Signal assigned twice: %d\n", si);
-    assert(false);
+    const size_t errLn = 256;
+    char err[errLn];
+    snprintf(err, errLn, "Signal assigned twice: %d", si);
+    throw std::runtime_error(err);
   }
   signalValues[si] = val;
   inputSignalAssigned[si-get_main_input_signal_start()] = true;
@@ -110,8 +131,6 @@ std::string Circom_CalcWit::getTrace(u64 id_cmp){
 
     return Circom_CalcWit::getTrace(id_father) + "." + my_name;
   }
-
-
 }
 
 std::string Circom_CalcWit::generate_position_array(uint* dimensions, uint size_dimensions, uint index){

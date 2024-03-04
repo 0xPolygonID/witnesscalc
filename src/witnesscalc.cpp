@@ -65,27 +65,27 @@ Circom_Circuit* loadCircuit(const void *buffer, unsigned long buffer_size) {
       u32* pu32 = dataiomap;
 
       for (int i = 0; i < get_size_of_io_map(); i++) {
-    u32 n = *pu32;
-    IODefPair p;
-    p.len = n;
-    IODef defs[n];
-    pu32 += 1;
-    for (u32 j = 0; j <n; j++){
-      defs[j].offset=*pu32;
-      u32 len = *(pu32+1);
-      defs[j].len = len;
-      defs[j].lengths = new u32[len];
-      memcpy((void *)defs[j].lengths,(void *)(pu32+2),len*sizeof(u32));
-      pu32 += len + 2;
-    }
-    p.defs = (IODef*)calloc(10, sizeof(IODef));
-    for (u32 j = 0; j < p.len; j++){
-      p.defs[j] = defs[j];
-    }
-    templateInsId2IOSignalInfo1[index[i]] = p;
+        u32 n = *pu32;
+        IODefPair p;
+        p.len = n;
+        IODef defs[n];
+        pu32 += 1;
+        for (u32 j = 0; j <n; j++){
+          defs[j].offset=*pu32;
+          u32 len = *(pu32+1);
+          defs[j].len = len;
+          defs[j].lengths = new u32[len];
+          memcpy((void *)defs[j].lengths,(void *)(pu32+2),len*sizeof(u32));
+          pu32 += len + 2;
+        }
+        p.defs = (IODef*)calloc(10, sizeof(IODef));
+        for (u32 j = 0; j < p.len; j++){
+          p.defs[j] = defs[j];
+        }
+        templateInsId2IOSignalInfo1[index[i]] = p;
       }
     }
-    circuit->templateInsId2IOSignalInfo = move(templateInsId2IOSignalInfo1);
+    circuit->templateInsId2IOSignalInfo = std::move(templateInsId2IOSignalInfo1);
 
     return circuit;
 }
@@ -132,7 +132,7 @@ void json2FrElements (json val, std::vector<FrElement> & vval){
       if (!check_valid_number(s, base)){
         std::ostringstream errStrStream;
         errStrStream << "Invalid number in JSON input: " << s_aux << "\n";
-	      throw std::runtime_error(errStrStream.str() );
+          throw std::runtime_error(errStrStream.str() );
       }
     } else if (val.is_number()) {
         double vd = val.get<double>();
@@ -179,12 +179,12 @@ void loadJson(Circom_CalcWit *ctx, const char *json_buffer, unsigned long buffer
     }
     for (uint i = 0; i<v.size(); i++){
       try {
-    // std::cout << it.key() << "," << i << " => " << Fr_element2str(&(v[i])) << '\n';
-    ctx->setInputSignal(h,i,v[i]);
+        // std::cout << it.key() << "," << i << " => " << Fr_element2str(&(v[i])) << '\n';
+        ctx->setInputSignal(h,i,v[i]);
       } catch (std::runtime_error e) {
-    std::ostringstream errStrStream;
-	errStrStream << "Error setting signal: " << it.key() << "\n" << e.what();
-    throw std::runtime_error(errStrStream.str() );
+        std::ostringstream errStrStream;
+        errStrStream << "Error setting signal: " << it.key() << "\n" << e.what();
+        throw std::runtime_error(errStrStream.str() );
       }
     }
   }

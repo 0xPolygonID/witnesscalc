@@ -61,6 +61,7 @@ typings/
 .next
 
 tmp
+temp
 
 .DS_Store
 
