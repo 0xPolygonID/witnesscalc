@@ -65,24 +65,6 @@ set(LIB_SOURCES
     witnesscalc.cpp
     )
 
-# # auth
-# set(AUTH_SOURCES ${LIB_SOURCES}
-#     auth.cpp
-#     witnesscalc_auth.h
-#     witnesscalc_auth.cpp
-#     )
-#
-# add_library(witnesscalc_auth SHARED ${AUTH_SOURCES})
-# add_library(witnesscalc_authStatic STATIC ${AUTH_SOURCES})
-# set_target_properties(witnesscalc_authStatic PROPERTIES OUTPUT_NAME witnesscalc_auth)
-#
-# add_executable(auth main.cpp)
-# target_link_libraries(auth witnesscalc_authStatic)
-#
-# target_compile_definitions(witnesscalc_auth PUBLIC CIRCUIT_NAME=auth)
-# target_compile_definitions(witnesscalc_authStatic PUBLIC CIRCUIT_NAME=auth)
-# target_compile_definitions(auth PUBLIC CIRCUIT_NAME=auth)
-
 # authV2
 set(AUTHV2_SOURCES ${LIB_SOURCES}
     authV2.cpp
