@@ -39,6 +39,35 @@ struct Circom_Circuit {
   u64* witness2SignalList;
   FrElement* circuitConstants;  
   std::map<u32,IODefPair> templateInsId2IOSignalInfo;
+
+  ~Circom_Circuit() {
+
+    if (InputHashMap != nullptr) {
+      delete[] InputHashMap;
+      InputHashMap = nullptr;
+    }
+
+    if (witness2SignalList != nullptr) {
+      delete[] witness2SignalList;
+      witness2SignalList = nullptr;
+    }
+
+    if (circuitConstants != nullptr) {
+      delete[] circuitConstants;
+      circuitConstants = nullptr;
+    }
+
+    for (auto &pair : templateInsId2IOSignalInfo) {
+      auto *defs = pair.second.defs;
+      if (defs != nullptr) {
+        delete[] defs->lengths;
+        free(defs);
+      }
+
+    }
+  }
+};
+
 };
 
 
