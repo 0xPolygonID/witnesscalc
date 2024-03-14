@@ -68,8 +68,6 @@ struct Circom_Circuit {
   }
 };
 
-};
-
 
 struct Circom_Component {
   u32 templateId;
