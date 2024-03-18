@@ -42,20 +42,11 @@ struct Circom_Circuit {
 
   ~Circom_Circuit() {
 
-    if (InputHashMap != nullptr) {
-      delete[] InputHashMap;
-      InputHashMap = nullptr;
-    }
+    delete[] InputHashMap;
 
-    if (witness2SignalList != nullptr) {
-      delete[] witness2SignalList;
-      witness2SignalList = nullptr;
-    }
+    delete[] witness2SignalList;
 
-    if (circuitConstants != nullptr) {
-      delete[] circuitConstants;
-      circuitConstants = nullptr;
-    }
+    delete[] circuitConstants;
 
     for (auto &pair : templateInsId2IOSignalInfo) {
       auto *defs = pair.second.defs;
@@ -63,8 +54,8 @@ struct Circom_Circuit {
         delete[] defs->lengths;
         free(defs);
       }
-
     }
+
   }
 };
 
