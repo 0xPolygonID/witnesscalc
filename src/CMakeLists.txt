@@ -190,3 +190,23 @@ target_link_libraries(credentialAtomicQueryV3OnChain witnesscalc_credentialAtomi
 target_compile_definitions(witnesscalc_credentialAtomicQueryV3OnChain PUBLIC CIRCUIT_NAME=credentialAtomicQueryV3OnChain)
 target_compile_definitions(witnesscalc_credentialAtomicQueryV3OnChainStatic PUBLIC CIRCUIT_NAME=credentialAtomicQueryV3OnChain)
 target_compile_definitions(credentialAtomicQueryV3OnChain PUBLIC CIRCUIT_NAME=credentialAtomicQueryV3OnChain)
+
+# linkedMultiQuery10
+# authV2
+set(LINKEDMULTIQUERY10_SOURCES ${LIB_SOURCES}
+    linkedMultiQuery10.cpp
+    witnesscalc_linkedMultiQuery10.h
+    witnesscalc_linkedMultiQuery10.cpp
+    )
+
+add_library(witnesscalc_linkedMultiQuery10 SHARED ${AUTHV2_SOURCES})
+add_library(witnesscalc_linkedMultiQuery10Static STATIC ${AUTHV2_SOURCES})
+set_target_properties(witnesscalc_linkedMultiQuery10Static PROPERTIES OUTPUT_NAME witnesscalc_linkedMultiQuery10)
+
+add_executable(linkedMultiQuery10 main.cpp)
+target_link_libraries(linkedMultiQuery10 witnesscalc_linkedMultiQuery10Static)
+
+target_compile_definitions(witnesscalc_linkedMultiQuery10 PUBLIC CIRCUIT_NAME=linkedMultiQuery10)
+target_compile_definitions(witnesscalc_linkedMultiQuery10Static PUBLIC CIRCUIT_NAME=linkedMultiQuery10)
+target_compile_definitions(linkedMultiQuery10 PUBLIC CIRCUIT_NAME=linkedMultiQuery10)
+

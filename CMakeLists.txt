@@ -37,6 +37,9 @@ install(TARGETS
     #auth
     #witnesscalc_auth
     #witnesscalc_authStatic
+    linkedMultiQuery10
+    witnesscalc_linkedMultiQuery10
+    witnesscalc_linkedMultiQuery10Static
     authV2
     witnesscalc_authV2
     witnesscalc_authV2Static
