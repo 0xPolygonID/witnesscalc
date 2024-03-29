@@ -121,3 +121,16 @@ snarkjs groth16 verify \
   circuits/credentialAtomicQueryV3OnChain-beta.1/verification_key.json \
   temp/credentialAtomicQueryV3OnChain_MTP_public.json \
   temp/credentialAtomicQueryV3OnChain_MTP_proof.json
+
+package/bin/linkedMultiQuery10 \
+  testdata/linkedMultiQuery10_input.json \
+  temp/linkedMultiQuery10_witness.wtns
+snarkjs groth16 prove \
+  circuits/linkedMultiQuery10/circuit_final.zkey \
+  temp/linkedMultiQuery10_witness.wtns \
+  temp/linkedMultiQuery10_proof.json \
+  temp/linkedMultiQuery10_public.json
+snarkjs groth16 verify \
+  circuits/linkedMultiQuery10/verification_key.json \
+  temp/linkedMultiQuery10_public.json \
+  temp/linkedMultiQuery10_proof.json
