@@ -126,7 +126,7 @@ package/bin/linkedMultiQuery10 \
   testdata/linkedMultiQuery10_input.json \
   temp/linkedMultiQuery10_witness.wtns
 snarkjs groth16 prove \
-  circuits/linkedMultiQuery10/circuit_final.zkey \
+  circuits/linkedMultiQuery10-beta.1/circuit_final.zkey \
   temp/linkedMultiQuery10_witness.wtns \
   temp/linkedMultiQuery10_proof.json \
   temp/linkedMultiQuery10_public.json
