@@ -199,8 +199,8 @@ set(LINKEDMULTIQUERY10_SOURCES ${LIB_SOURCES}
     witnesscalc_linkedMultiQuery10.cpp
     )
 
-add_library(witnesscalc_linkedMultiQuery10 SHARED ${AUTHV2_SOURCES})
-add_library(witnesscalc_linkedMultiQuery10Static STATIC ${AUTHV2_SOURCES})
+add_library(witnesscalc_linkedMultiQuery10 SHARED ${LINKEDMULTIQUERY10_SOURCES})
+add_library(witnesscalc_linkedMultiQuery10Static STATIC ${LINKEDMULTIQUERY10_SOURCES})
 set_target_properties(witnesscalc_linkedMultiQuery10Static PROPERTIES OUTPUT_NAME witnesscalc_linkedMultiQuery10)
 
 add_executable(linkedMultiQuery10 main.cpp)
