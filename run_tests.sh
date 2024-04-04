@@ -131,6 +131,6 @@ snarkjs groth16 prove \
   temp/linkedMultiQuery10_proof.json \
   temp/linkedMultiQuery10_public.json
 snarkjs groth16 verify \
-  circuits/linkedMultiQuery10/verification_key.json \
+  circuits/linkedMultiQuery10-beta.1/verification_key.json \
   temp/linkedMultiQuery10_public.json \
   temp/linkedMultiQuery10_proof.json
