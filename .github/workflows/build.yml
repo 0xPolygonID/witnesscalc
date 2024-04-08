@@ -34,7 +34,13 @@ jobs:
           if [[ ! -d "depends/gmp/package_android_arm64" ]]; then ./build_gmp.sh android; fi
           if [[ ! -d "depends/gmp/package_android_x86_64" ]]; then ./build_gmp.sh android_x86_64; fi
 
-      - name: build
+      - name: build Android
+        run: make android
+
+      - name: build Android x86_64
+        run: make android_x86_64
+
+      - name: build macOS
         run: |
           mkdir build_witnesscalc && cd build_witnesscalc
           cmake .. -DTARGET_PLATFORM=arm64_host -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../package
@@ -42,6 +48,8 @@ jobs:
           make install
           cd ../
           
+      - name: build iOS
+        run: |
           mkdir build_witnesscalc_ios && cd build_witnesscalc_ios
           cmake .. -GXcode -DTARGET_PLATFORM=IOS -DCMAKE_INSTALL_PREFIX=../package_ios
           xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS' -configuration Release -scheme witnesscalc_authV2Static
@@ -73,6 +81,8 @@ jobs:
           cp -r ../package/include ../package_ios/include
           cd ../
 
+      - name: build iOS simulator
+        run: |
           mkdir build_prover_ios_simulator && cd build_prover_ios_simulator
           cmake .. -GXcode -DTARGET_PLATFORM=IOS -DCMAKE_INSTALL_PREFIX=../package_ios_simulator -DUSE_ASM=NO
           xcodebuild -project witnesscalc.xcodeproj -destination 'generic/platform=iOS Simulator' -configuration Debug -scheme witnesscalc_authV2Static
@@ -104,12 +114,6 @@ jobs:
           cp -r ../package/include ../package_ios_simulator/include
           cd ../
           
-          # test Andoid build on macOS (without uploading artifacts)
-          make android
-          
-          # test Andoid x86_64 build on macOS (without uploading artifacts)
-          make android_x86_64
-
       - name: Cache circuits
         uses: actions/cache@v4
         with:
