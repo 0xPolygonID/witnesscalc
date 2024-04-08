@@ -20,7 +20,7 @@ jobs:
           path: |
             depends/gmp
             depends/gmp-6.2.1.tar.xz
-          key: ${{ runner.os }}-witnesscalc-gmp-apple-arm64-${{ hashFiles('build_gmp.sh') }}
+          key: ${{ runner.os }}-witnesscalc-gmp-apple-arm64-${{ hashFiles('build_gmp.sh') }}-2
 
       - name: install dependencies
         run: |
@@ -31,6 +31,8 @@ jobs:
           if [[ ! -d "depends/gmp/package" ]]; then ./build_gmp.sh host; fi
           if [[ ! -d "depends/gmp/package_ios_arm64" ]]; then ./build_gmp.sh ios; fi
           if [[ ! -d "depends/gmp/package_iphone_simulator" ]]; then ./build_gmp.sh ios_simulator; fi
+          if [[ ! -d "depends/gmp/package_android_arm64" ]]; then ./build_gmp.sh android; fi
+          if [[ ! -d "depends/gmp/package_android_x86_64" ]]; then ./build_gmp.sh android_x86_64; fi
 
       - name: build
         run: |
@@ -101,6 +103,12 @@ jobs:
             ../package_ios_simulator/lib
           cp -r ../package/include ../package_ios_simulator/include
           cd ../
+          
+          # test Andoid build on macOS (without uploading artifacts)
+          make android
+          
+          # test Andoid x86_64 build on macOS (without uploading artifacts)
+          make android_x86_64
 
       - name: Cache circuits
         uses: actions/cache@v4
