@@ -86,6 +86,7 @@ Requirements: Xcode.
    } // namespace
     
    ```
+4. Optional. Replace all accurances of `assert(` with `check(` in .cpp file to switch from asserts to exceptions (more secure).
 
 ## License
 
