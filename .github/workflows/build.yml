@@ -69,7 +69,6 @@ jobs:
             ../src/credentialAtomicQuerySigV2OnChain.dat \
             ../src/credentialAtomicQueryV3.dat \
             ../src/credentialAtomicQueryV3OnChain.dat \
-            ../src/credentialAtomicQueryV3OnChain.dat \
             ../src/linkedMultiQuery10.dat \
             ../package_ios/lib
           cp -r ../package/include ../package_ios/include
