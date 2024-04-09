@@ -34,9 +34,6 @@ add_subdirectory(src)
 install(TARGETS
     tests
     test_platform
-    #auth
-    #witnesscalc_auth
-    #witnesscalc_authStatic
     authV2
     witnesscalc_authV2
     witnesscalc_authV2Static
@@ -58,6 +55,9 @@ install(TARGETS
     credentialAtomicQueryV3OnChain
     witnesscalc_credentialAtomicQueryV3OnChain
     witnesscalc_credentialAtomicQueryV3OnChainStatic
+    linkedMultiQuery10
+    witnesscalc_linkedMultiQuery10
+    witnesscalc_linkedMultiQuery10Static
     fr
     RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
     BUNDLE DESTINATION ${CMAKE_INSTALL_PREFIX}/app
@@ -67,7 +67,6 @@ install(FILES "${GMP_LIB_DIR}/${GMP_LIB_FILE}"
     DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 
 install(FILES
-    # src/auth.dat
     src/authV2.dat
     src/credentialAtomicQuerySigV2.dat
     src/credentialAtomicQueryMTPV2.dat
@@ -75,11 +74,11 @@ install(FILES
     src/credentialAtomicQueryMTPV2OnChain.dat
     src/credentialAtomicQueryV3.dat
     src/credentialAtomicQueryV3OnChain.dat
+    src/linkedMultiQuery10.dat
     DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 install(FILES
     src/witnesscalc.h
-    #src/witnesscalc_auth.h
     src/witnesscalc_authV2.h
     src/witnesscalc_credentialAtomicQuerySigV2.h
     src/witnesscalc_credentialAtomicQueryMTPV2.h
@@ -87,4 +86,5 @@ install(FILES
     src/witnesscalc_credentialAtomicQueryMTPV2OnChain.h
     src/witnesscalc_credentialAtomicQueryV3.h
     src/witnesscalc_credentialAtomicQueryV3OnChain.h
+    src/witnesscalc_linkedMultiQuery10.h
     DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
