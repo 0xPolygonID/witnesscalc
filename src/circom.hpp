@@ -25,20 +25,38 @@ struct __attribute__((__packed__)) HashSignalInfo {
 struct IODef { 
     u32 offset;
     u32 len;
-    u32 *lengths;
+    u32 *lengths = nullptr;
 };
 
 struct IODefPair { 
     u32 len;
-    IODef* defs;
+    IODef* defs = nullptr;
 };
 
 struct Circom_Circuit {
   //  const char *P;
-  HashSignalInfo* InputHashMap;
-  u64* witness2SignalList;
-  FrElement* circuitConstants;  
+  HashSignalInfo* InputHashMap = nullptr;
+  u64* witness2SignalList = nullptr;
+  FrElement* circuitConstants = nullptr;  
   std::map<u32,IODefPair> templateInsId2IOSignalInfo;
+
+  ~Circom_Circuit() {
+
+    delete[] InputHashMap;
+
+    delete[] witness2SignalList;
+
+    delete[] circuitConstants;
+
+    for (auto &pair : templateInsId2IOSignalInfo) {
+      auto *defs = pair.second.defs;
+      if (defs != nullptr) {
+        delete[] defs->lengths;
+        free(defs);
+      }
+    }
+
+  }
 };
 
 
@@ -49,12 +67,12 @@ struct Circom_Component {
   std::string templateName;
   std::string componentName;
   u64 idFather; 
-  u32* subcomponents;
-  bool* subcomponentsParallel;
-  bool *outputIsSet;  //one for each output
-  std::mutex *mutexes;  //one for each output
-  std::condition_variable *cvs;
-  std::thread *sbct; //subcomponent threads
+  u32* subcomponents = nullptr;
+  bool* subcomponentsParallel = nullptr;
+  bool *outputIsSet = nullptr;  //one for each output
+  std::mutex *mutexes = nullptr;  //one for each output
+  std::condition_variable *cvs = nullptr;
+  std::thread *sbct = nullptr; //subcomponent threads
 
   Circom_Component()
 	: subcomponents(0), subcomponentsParallel(0), outputIsSet(0), mutexes(0), cvs(0), sbct(0)
