@@ -86,7 +86,12 @@ Requirements: Xcode.
    } // namespace
     
    ```
-4. Optional. Replace all accurances of `assert(` with `check(` in .cpp file to switch from asserts to exceptions (more secure).
+4. Optional. Remove the `#include <assert.h>` line and replace all accurances of `assert(` with `check(` in .cpp file to switch from asserts to exceptions (more secure).
+
+Alternatively you can patch the `.cpp` circuit file with a `patch_cpp.sh` script. Example how to run it:
+```shell
+./patch_cpp.sh ../circuits/build/linkedMultiQuery10/linkedMultiQuery10_cpp/linkedMultiQuery10.cpp > ./src/linkedMultiQuery10.cpp
+```
 
 ## License
 
