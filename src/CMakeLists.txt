@@ -83,6 +83,42 @@ target_compile_definitions(witnesscalc_authV2 PUBLIC CIRCUIT_NAME=authV2)
 target_compile_definitions(witnesscalc_authV2Static PUBLIC CIRCUIT_NAME=authV2)
 target_compile_definitions(authV2 PUBLIC CIRCUIT_NAME=authV2)
 
+# authV3
+set(AUTHV3_SOURCES ${LIB_SOURCES}
+    authV3.cpp
+    witnesscalc_authV3.h
+    witnesscalc_authV3.cpp
+    )
+
+add_library(witnesscalc_authV3 SHARED ${AUTHV3_SOURCES})
+add_library(witnesscalc_authV3Static STATIC ${AUTHV3_SOURCES})
+set_target_properties(witnesscalc_authV3Static PROPERTIES OUTPUT_NAME witnesscalc_authV3)
+
+add_executable(authV3 main.cpp)
+target_link_libraries(authV3 witnesscalc_authV3Static)
+
+target_compile_definitions(witnesscalc_authV3 PUBLIC CIRCUIT_NAME=authV3)
+target_compile_definitions(witnesscalc_authV3Static PUBLIC CIRCUIT_NAME=authV3)
+target_compile_definitions(authV3 PUBLIC CIRCUIT_NAME=authV3)
+
+# authV3-8-32
+set(AUTHV3_8_32_SOURCES ${LIB_SOURCES}
+    authV3-8-32.cpp
+    witnesscalc_authV3-8-32.h
+    witnesscalc_authV3-8-32.cpp
+    )
+
+add_library(witnesscalc_authV3-8-32 SHARED ${AUTHV3_8_32_SOURCES})
+add_library(witnesscalc_authV3-8-32Static STATIC ${AUTHV3_8_32_SOURCES})
+set_target_properties(witnesscalc_authV3-8-32Static PROPERTIES OUTPUT_NAME witnesscalc_authV3-8-32)
+
+add_executable(authV3-8-32 main.cpp)
+target_link_libraries(authV3-8-32 witnesscalc_authV3-8-32Static)
+
+target_compile_definitions(witnesscalc_authV3-8-32 PUBLIC CIRCUIT_NAME=authV3_8_32)
+target_compile_definitions(witnesscalc_authV3-8-32Static PUBLIC CIRCUIT_NAME=authV3_8_32)
+target_compile_definitions(authV3-8-32 PUBLIC CIRCUIT_NAME=authV3_8_32)
+
 # credentialAtomicQueryMTPV2
 set(CREDENTIALATOMICQUERYMTPV2OFFCHAIN_SOURCES ${LIB_SOURCES}
     credentialAtomicQueryMTPV2.cpp
