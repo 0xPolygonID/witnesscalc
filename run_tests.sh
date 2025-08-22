@@ -18,6 +18,36 @@ snarkjs groth16 verify \
   temp/authV2_public.json \
   temp/authV2_proof.json
 
+if [[ -d "" ]]; then
+  package/bin/authV3 \
+    testdata/authV3_input.json \
+    temp/authV3_witness.wtns
+  snarkjs groth16 prove \
+    circuits/authV3/circuit_final.zkey \
+    temp/authV3_witness.wtns \
+    temp/authV3_proof.json \
+    temp/authV3_public.json
+  snarkjs groth16 verify \
+    circuits/authV3/verification_key.json \
+    temp/authV3_public.json \
+    temp/authV3_proof.json
+fi
+
+if [[ -d "" ]]; then
+  package/bin/authV3-8-32 \
+    testdata/authV3-8-32_input.json \
+    temp/authV3-8-32_witness.wtns
+  snarkjs groth16 prove \
+    circuits/authV3-8-32/circuit_final.zkey \
+    temp/authV3-8-32_witness.wtns \
+    temp/authV3-8-32_proof.json \
+    temp/authV3-8-32_public.json
+  snarkjs groth16 verify \
+    circuits/authV3-8-32/verification_key.json \
+    temp/authV3-8-32_public.json \
+    temp/authV3-8-32_proof.json
+fi
+
 package/bin/credentialAtomicQuerySigV2 \
   testdata/credentialAtomicQuerySigV2_input.json \
   temp/credentialAtomicQuerySigV2_witness.wtns

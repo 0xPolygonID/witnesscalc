@@ -18,7 +18,7 @@ public:
 
         fd = open(datFileName.c_str(), O_RDONLY);
         if (fd == -1) {
-            std::cout << ".dat file not found: " << datFileName << "\n";
+            std::cout << "file not found: " << datFileName << "\n";
             throw std::system_error(errno, std::generic_category(), "open");
         }
 
